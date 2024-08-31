@@ -35,10 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.zero,
         child: Center(
           child: WebOfWyrd(
-            size: Size(
-              heightOf(context) * (1 / 3),
-              heightOf(context) * (2 / 3),
-            ),
+            size: Size(widthOf(context), heightOf(context)),
             margin: 0,
           ),
         ),
