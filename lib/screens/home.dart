@@ -34,10 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: EzScreen(
         margin: EdgeInsets.zero,
         child: Center(
-          child: WebOfWyrd(
-            size: Size(widthOf(context), heightOf(context)),
-            margin: 0,
-          ),
+          child: WebOfWyrd(Size(widthOf(context), heightOf(context))),
         ),
       ),
       fab: SettingsFAB(context: context),
