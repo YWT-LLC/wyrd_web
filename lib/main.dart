@@ -134,6 +134,7 @@ class WyrdWeb extends StatelessWidget {
         localizationsDelegates: <LocalizationsDelegate<dynamic>>{
           const LocaleNamesLocalizationsDelegate(),
           ...EFUILang.localizationsDelegates,
+          ...Lang.localizationsDelegates,
           EmpathetechFeedbackLocalizationsDelegate(),
         },
         supportedLocales: const <Locale>[
