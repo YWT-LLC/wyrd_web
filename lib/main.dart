@@ -68,6 +68,7 @@ void main() async {
     localizationsDelegates: <LocalizationsDelegate<dynamic>>[
       const LocaleNamesLocalizationsDelegate(),
       ...EFUILang.localizationsDelegates,
+      ...Lang.localizationsDelegates,
       EmpathetechFeedbackLocalizationsDelegate(),
     ],
     localeOverride: EzConfig.getLocale(),
@@ -135,7 +136,10 @@ class WyrdWeb extends StatelessWidget {
           ...EFUILang.localizationsDelegates,
           EmpathetechFeedbackLocalizationsDelegate(),
         },
-        supportedLocales: EFUILang.supportedLocales,
+        supportedLocales: const <Locale>[
+          ...EFUILang.supportedLocales,
+          ...Lang.supportedLocales,
+        ],
         locale: EzConfig.getLocale(),
         title: appTitle,
         routerConfig: router,
