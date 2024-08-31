@@ -48,7 +48,7 @@ class WyrdWebScaffold extends StatelessWidget {
           }
         },
         icon: const Icon(Icons.more_vert),
-        tooltip: 'Options menu',
+        tooltip: l10n.gOptions,
       ),
       menuChildren: <Widget>[
         FeedbackButton(
