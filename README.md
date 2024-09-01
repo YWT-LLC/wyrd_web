@@ -1,3 +1,3 @@
-# wyrd_web
+# Wyrd.Web
 
-A new Flutter project.
+A one-click Activity Pub server creator.
