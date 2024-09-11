@@ -39,7 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: EzScreen(
         decorationImageKey: isDark ? darkPageImageKey : lightPageImageKey,
         margin: EdgeInsets.zero,
-        child: const Center(child: WebOfWyrd()),
+        child: Container(
+          constraints: BoxConstraints(maxWidth: widthOf(context) * (2 / 3)),
+          child: const WebOfWyrd(),
+        ),
       ),
       fab: SettingsFAB(context: context),
     );
