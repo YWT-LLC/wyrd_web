@@ -31,11 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
-      body: EzScreen(
+      body: const EzScreen(
         margin: EdgeInsets.zero,
-        child: Center(
-          child: WebOfWyrd(Size(widthOf(context), heightOf(context))),
-        ),
+        child: Center(child: WebOfWyrd()),
       ),
       fab: SettingsFAB(context: context),
     );
