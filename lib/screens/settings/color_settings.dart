@@ -18,6 +18,11 @@ class ColorSettingsScreen extends StatefulWidget {
 class _ColorSettingsScreenState extends State<ColorSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const WyrdWebScaffold(body: ColorSettings());
+    return const WyrdWebScaffold(
+      body: ColorSettings(
+        lightBackgroundImageKey: lightPageImageKey,
+        darkBackgroundImageKey: darkPageImageKey,
+      ),
+    );
   }
 }

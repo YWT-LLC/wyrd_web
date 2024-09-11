@@ -18,6 +18,11 @@ class TextSettingsScreen extends StatefulWidget {
 class _TextSettingsScreenState extends State<TextSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const WyrdWebScaffold(body: TextSettings());
+    return const WyrdWebScaffold(
+      body: TextSettings(
+        lightBackgroundImageKey: lightPageImageKey,
+        darkBackgroundImageKey: darkPageImageKey,
+      ),
+    );
   }
 }

@@ -18,6 +18,11 @@ class ImageSettingsScreen extends StatefulWidget {
 class _ImageSettingsScreenState extends State<ImageSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const WyrdWebScaffold(body: ImageSettings());
+    return const WyrdWebScaffold(
+      body: ImageSettings(
+        lightBackgroundImageKey: lightPageImageKey,
+        darkBackgroundImageKey: darkPageImageKey,
+      ),
+    );
   }
 }

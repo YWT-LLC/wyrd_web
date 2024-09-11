@@ -18,6 +18,11 @@ class LayoutSettingsScreen extends StatefulWidget {
 class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const WyrdWebScaffold(body: LayoutSettings());
+    return const WyrdWebScaffold(
+      body: LayoutSettings(
+        lightBackgroundImageKey: lightPageImageKey,
+        darkBackgroundImageKey: darkPageImageKey,
+      ),
+    );
   }
 }
