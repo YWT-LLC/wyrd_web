@@ -28,7 +28,9 @@ dependencies:
 
 dev_dependencies:
   dependency_validator: ^4.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^4.0.0
+  flutter_native_splash: ^2.4.1
   flutter_test:
     sdk: flutter
   integration_test:
@@ -54,3 +56,25 @@ flutter:
     - assets/fonts/Roboto-Thin.ttf
     - assets/fonts/Roboto-ThinItalic.ttf
     - assets/images/
+    - assets/images/web-of-wyrd.png
+
+flutter_launcher_icons:
+  image_path: assets/images/web-of-wyrd.png
+  adaptive_icon_foreground: assets/images/web-of-wyrd.png
+  adaptive_icon_background: "#F5F5F5"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+  windows:
+    generate: true
+  macos:
+    generate: true
+
+flutter_native_splash:
+  color: "#F5F5F5"
+  image: assets/images/web-of-wyrd.png
+  android: true
+  ios: true
+  web: true
