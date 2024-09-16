@@ -43,7 +43,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(
-        decorationImageKey: isDark ? darkPageImageKey : lightPageImageKey,
+        decorationImageKey:
+            isDark ? darkBackgroundImageKey : lightBackgroundImageKey,
         child: EzScrollView(
           children: <Widget>[
             // Functionality disclaimer

@@ -20,8 +20,8 @@ class _TextSettingsScreenState extends State<TextSettingsScreen> {
   Widget build(BuildContext context) {
     return const WyrdWebScaffold(
       body: TextSettings(
-        lightBackgroundImageKey: lightPageImageKey,
-        darkBackgroundImageKey: darkPageImageKey,
+        lightBackgroundImageKey: lightBackgroundImageKey,
+        darkBackgroundImageKey: darkBackgroundImageKey,
       ),
     );
   }

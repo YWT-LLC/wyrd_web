@@ -20,8 +20,8 @@ class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
   Widget build(BuildContext context) {
     return const WyrdWebScaffold(
       body: LayoutSettings(
-        lightBackgroundImageKey: lightPageImageKey,
-        darkBackgroundImageKey: darkPageImageKey,
+        lightBackgroundImageKey: lightBackgroundImageKey,
+        darkBackgroundImageKey: darkBackgroundImageKey,
       ),
     );
   }

@@ -37,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(
-        decorationImageKey: isDark ? darkPageImageKey : lightPageImageKey,
+        decorationImageKey:
+            isDark ? darkBackgroundImageKey : lightBackgroundImageKey,
         margin: EdgeInsets.zero,
         child: Container(
           constraints: BoxConstraints(maxWidth: widthOf(context) * (2 / 3)),
