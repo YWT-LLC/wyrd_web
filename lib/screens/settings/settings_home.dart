@@ -22,12 +22,12 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   // Gather the theme data //
 
+  static const EzSpacer spacer = EzSpacer();
+  static const EzSeparator separator = EzSeparator();
+
   late bool isDark = PlatformTheme.of(context)!.isDark;
 
   late final EFUILang l10n = EFUILang.of(context)!;
-
-  static const EzSpacer spacer = EzSpacer();
-  static const EzSeparator separator = EzSeparator();
 
   // Set the page title //
 

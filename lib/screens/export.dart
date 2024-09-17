@@ -15,17 +15,32 @@ export 'settings/image_settings.dart';
 
 // Path names //
 
+/// 'settings'
 const String settingsPath = 'settings';
+
+/// '/settings'
 const String settingsRoute = '/settings';
 
+/// 'text-settings'
 const String textSettingsPath = 'text-settings';
+
+/// '/settings/text-settings'
 const String textSettingsRoute = '/settings/text-settings';
 
+/// 'layout-settings'
 const String layoutSettingsPath = 'layout-settings';
+
+/// '/settings/layout-settings'
 const String layoutSettingsRoute = '/settings/layout-settings';
 
+/// 'color-settings'
 const String colorSettingsPath = 'color-settings';
+
+/// '/settings/color-settings'
 const String colorSettingsRoute = '/settings/color-settings';
 
+/// 'image-settings'
 const String imageSettingsPath = 'image-settings';
+
+/// '/settings/image-settings'
 const String imageSettingsRoute = '/settings/image-settings';

@@ -98,12 +98,6 @@ abstract class Lang {
     Locale('fr')
   ];
 
-  /// No description provided for @gLogoHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Empathetic LLC logo: a two dimensional hourglass. Activate to go to the home page'**
-  String get gLogoHint;
-
   /// No description provided for @gSettingsHint.
   ///
   /// In en, this message translates to:

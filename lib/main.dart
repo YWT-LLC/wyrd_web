@@ -18,6 +18,7 @@ import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 
 void main() async {
   // Setup the app //
+
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[

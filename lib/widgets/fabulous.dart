@@ -12,7 +12,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingsFAB extends FloatingActionButton {
   /// [FloatingActionButton] that goes to the [SettingsScreen]
-  SettingsFAB({required BuildContext context, super.key})
+  SettingsFAB(BuildContext context, {super.key})
       : super(
           child: Icon(PlatformIcons(context).settings),
           onPressed: () => context.go(settingsRoute),
