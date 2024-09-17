@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingsHomeScreen extends StatefulWidget {
   const SettingsHomeScreen({super.key});
@@ -25,8 +24,6 @@ class _SettingsScreenState extends State<SettingsHomeScreen> {
   static const EzSpacer spacer = EzSpacer();
   static const EzSeparator separator = EzSeparator();
 
-  late bool isDark = PlatformTheme.of(context)!.isDark;
-
   late final EFUILang l10n = EFUILang.of(context)!;
 
   // Set the page title //
@@ -34,7 +31,7 @@ class _SettingsScreenState extends State<SettingsHomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setPageTitle(efuiL);
+    setPageTitle(l10n.ssPageTitle);
   }
 
   // Return the build //
@@ -43,8 +40,6 @@ class _SettingsScreenState extends State<SettingsHomeScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(
-        decorationImageKey:
-            isDark ? darkBackgroundImageKey : lightBackgroundImageKey,
         child: EzScrollView(
           children: <Widget>[
             // Functionality disclaimer
