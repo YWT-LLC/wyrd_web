@@ -9,7 +9,6 @@ import '../widgets/export.dart';
 import 'package:flutter/material.dart';
 import 'package:efui_bios/efui_bios.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,10 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Gather theme data //
-
-  late bool isDark = PlatformTheme.of(context)!.isDark;
-
   // Set the page title //
 
   @override
@@ -37,8 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(
-        decorationImageKey:
-            isDark ? darkBackgroundImageKey : lightBackgroundImageKey,
         margin: EdgeInsets.zero,
         child: Container(
           constraints: BoxConstraints(maxWidth: widthOf(context) * (2 / 3)),
