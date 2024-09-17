@@ -11,6 +11,8 @@ import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
   final Widget body;
+
+  /// [FloatingActionButton]
   final Widget? fab;
 
   /// Standardized [Scaffold] for all of the EFUI example app's screens
@@ -76,6 +78,8 @@ class WyrdWebScaffold extends StatelessWidget {
 
             // Title
             title: const Text(appTitle),
+            titleSpacing: 0,
+            centerTitle: true,
 
             // Actions (aka trailing aka right)
             actions:
@@ -86,6 +90,9 @@ class WyrdWebScaffold extends StatelessWidget {
         // Body
         body: body,
         floatingActionButton: fab,
+        floatingActionButtonLocation: isLefty
+            ? FloatingActionButtonLocation.startFloat
+            : FloatingActionButtonLocation.endFloat,
       ),
     );
 
