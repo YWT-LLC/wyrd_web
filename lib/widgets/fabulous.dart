@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class SettingsFAB extends FloatingActionButton {
-  /// [FloatingActionButton] that goes to the [SettingsScreen]
+  /// [FloatingActionButton] that goes to the [SettingsHomeScreen]
   SettingsFAB(BuildContext context, {super.key})
       : super(
           child: Icon(PlatformIcons(context).settings),
