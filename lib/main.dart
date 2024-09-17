@@ -89,7 +89,7 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: settingsPath,
           builder: (BuildContext context, GoRouterState state) {
-            return const SettingsScreen();
+            return const SettingsHomeScreen();
           },
           routes: <RouteBase>[
             GoRoute(
