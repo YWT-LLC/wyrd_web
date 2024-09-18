@@ -54,7 +54,6 @@ class WyrdWebScaffold extends StatelessWidget {
       ),
       menuChildren: <Widget>[
         FeedbackButton(
-          parentContext: context,
           scaffoldMessengerKey: scaffoldMessengerKey,
           l10n: l10n,
         ),
