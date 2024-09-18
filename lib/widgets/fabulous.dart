@@ -15,7 +15,7 @@ class SettingsFAB extends FloatingActionButton {
   SettingsFAB(BuildContext context, {super.key})
       : super(
           child: Icon(PlatformIcons(context).settings),
-          onPressed: () => context.go(settingsRoute),
+          onPressed: () => context.goNamed(settingsPath),
           tooltip: Lang.of(context)!.gSettingsHint,
         );
 }
