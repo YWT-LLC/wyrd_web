@@ -86,10 +86,15 @@ class WyrdWebScaffold extends StatelessWidget {
 
         // Body
         body: body,
+
+        // FAB
         floatingActionButton: fab,
         floatingActionButtonLocation: isLefty
             ? FloatingActionButtonLocation.startFloat
             : FloatingActionButtonLocation.endFloat,
+
+        // Prevents the keyboard from pushing the body up
+        resizeToAvoidBottomInset: false,
       ),
     );
 
