@@ -1,11 +1,10 @@
 /* wyrd_web
- * Copyright (c) 2024 Empathetech LLC. All rights reserved.
+ * Copyright (c) 2022-2025 Empathetech LLC. All rights reserved.
  * See LICENSE for distribution and usage details.
  */
 
 import 'screens/export.dart';
 import 'utils/export.dart';
-import 'widgets/export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,8 +40,8 @@ void main() async {
   // Run the app //
   // With a feedback wrapper
 
-  late final TextStyle lightFeedbackText = buildBody(Colors.black);
-  late final TextStyle darkFeedbackText = buildBody(Colors.white);
+  late final TextStyle lightFeedbackText = ezBodyStyle(Colors.black);
+  late final TextStyle darkFeedbackText = ezBodyStyle(Colors.white);
 
   runApp(BetterFeedback(
     theme: FeedbackThemeData(
@@ -52,8 +51,8 @@ void main() async {
       bottomSheetDescriptionStyle: lightFeedbackText,
       bottomSheetTextInputStyle: lightFeedbackText,
       sheetIsDraggable: true,
-      dragHandleColor: Colors.grey,
-      colorScheme: const ColorScheme.light(primary: empathGoldenrod),
+      dragHandleColor: Colors.black,
+      colorScheme: const ColorScheme.light(primary: empathPurple),
     ),
     darkTheme: FeedbackThemeData(
       background: Colors.grey,
@@ -62,8 +61,8 @@ void main() async {
       bottomSheetDescriptionStyle: darkFeedbackText,
       bottomSheetTextInputStyle: darkFeedbackText,
       sheetIsDraggable: true,
-      dragHandleColor: Colors.grey,
-      colorScheme: const ColorScheme.dark(primary: empathGoldenrod),
+      dragHandleColor: Colors.white,
+      colorScheme: const ColorScheme.dark(primary: empathEucalyptus),
     ),
     themeMode: EzConfig.getThemeMode(),
     localizationsDelegates: <LocalizationsDelegate<dynamic>>[
@@ -77,8 +76,11 @@ void main() async {
   ));
 }
 
+// Define routes //
+
 final GoRouter router = GoRouter(
   initialLocation: homePath,
+  errorBuilder: (_, GoRouterState state) => ErrorScreen(state.error),
   routes: <RouteBase>[
     GoRoute(
       path: homePath,
@@ -94,16 +96,44 @@ final GoRouter router = GoRouter(
               path: textSettingsPath,
               name: textSettingsPath,
               builder: (_, __) => const TextSettingsScreen(),
-            ),
-            GoRoute(
-              path: colorSettingsPath,
-              name: colorSettingsPath,
-              builder: (_, __) => const ColorSettingsScreen(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: EzSettingType.quick.path,
+                  name: 'text_${EzSettingType.quick.path}',
+                  builder: (_, __) =>
+                      const TextSettingsScreen(target: EzSettingType.quick),
+                ),
+                GoRoute(
+                  path: EzSettingType.advanced.path,
+                  name: 'text_${EzSettingType.advanced.path}',
+                  builder: (_, __) =>
+                      const TextSettingsScreen(target: EzSettingType.advanced),
+                ),
+              ],
             ),
             GoRoute(
               path: layoutSettingsPath,
               name: layoutSettingsPath,
               builder: (_, __) => const LayoutSettingsScreen(),
+            ),
+            GoRoute(
+              path: colorSettingsPath,
+              name: colorSettingsPath,
+              builder: (_, __) => const ColorSettingsScreen(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: EzSettingType.quick.path,
+                  name: 'color_${EzSettingType.quick.path}',
+                  builder: (_, __) =>
+                      const ColorSettingsScreen(target: EzSettingType.quick),
+                ),
+                GoRoute(
+                  path: EzSettingType.advanced.path,
+                  name: 'color_${EzSettingType.advanced.path}',
+                  builder: (_, __) =>
+                      const ColorSettingsScreen(target: EzSettingType.advanced),
+                ),
+              ],
             ),
             GoRoute(
               path: imageSettingsPath,
@@ -123,7 +153,6 @@ class WyrdWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EzAppProvider(
-      scaffoldMessengerKey: scaffoldMessengerKey,
       app: PlatformApp.router(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: <LocalizationsDelegate<dynamic>>{
@@ -132,10 +161,7 @@ class WyrdWeb extends StatelessWidget {
           ...Lang.localizationsDelegates,
           EmpathetechFeedbackLocalizationsDelegate(),
         },
-        supportedLocales: const <Locale>[
-          ...EFUILang.supportedLocales,
-          ...Lang.supportedLocales,
-        ],
+        supportedLocales: Lang.supportedLocales,
         locale: EzConfig.getLocale(),
         title: appTitle,
         routerConfig: router,
