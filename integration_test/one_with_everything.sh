@@ -4,19 +4,20 @@ set -e
 
 ## Setup ##
 
-prefix=$HOME/repos/flutter/wyrd_web
+repos="repos/flutter"
 device=""
 
 # Gather flag variables
 while [[ "$1" != "" ]]; do
   case $1 in
-    --device ) shift
-               device="-d $1"
-               ;;
+    --device ) device="-d $2"; shift;;
+    --repo-path ) repos="$2"; shift;;
     * ) echo "Invalid input. Aborting."; exit 1
   esac
   shift
 done
+
+prefix=$HOME/$repos/wyrd_web
 
 ## Tests ##
 
