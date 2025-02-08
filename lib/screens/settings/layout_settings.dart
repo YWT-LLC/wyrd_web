@@ -1,5 +1,5 @@
 /* wyrd_web
- * Copyright (c) 2024 Empathetech LLC. All rights reserved.
+ * Copyright (c) 2022-2025 Empathetech LLC. All rights reserved.
  * See LICENSE for distribution and usage details.
  */
 
@@ -12,6 +12,8 @@ class LayoutSettingsScreen extends StatelessWidget {
   const LayoutSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      const WyrdWebScaffold(body: LayoutSettings());
+  Widget build(BuildContext context) => WyrdWebScaffold(
+        body: const EzLayoutSettings(),
+        fab: EzBackFAB(context),
+      );
 }
