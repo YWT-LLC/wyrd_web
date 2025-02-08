@@ -1,10 +1,9 @@
 /* wyrd_web
- * Copyright (c) 2024 Empathetech LLC. All rights reserved.
+ * Copyright (c) 2022-2025 Empathetech LLC. All rights reserved.
  * See LICENSE for distribution and usage details.
  */
 
 import '../utils/export.dart';
-import './export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
@@ -29,7 +28,7 @@ class WyrdWebScaffold extends StatelessWidget {
     final bool isLefty = EzConfig.get(isLeftyKey) ?? false;
     final EFUILang l10n = EFUILang.of(context)!;
 
-    final Size appBarTextSize = measureText(
+    final Size appBarTextSize = ezTextSize(
       appTitle,
       style: Theme.of(context).appBarTheme.titleTextStyle,
       context: context,
@@ -53,9 +52,10 @@ class WyrdWebScaffold extends StatelessWidget {
         tooltip: l10n.gOptions,
       ),
       menuChildren: <Widget>[
-        FeedbackButton(
-          scaffoldMessengerKey: scaffoldMessengerKey,
-          l10n: l10n,
+        EzFeedbackMenuButton(
+          parentContext: context,
+          appName: appTitle,
+          supportEmail: empathSupport,
         ),
       ],
     );
