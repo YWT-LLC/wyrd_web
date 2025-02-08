@@ -1,8 +1,7 @@
 /* wyrd_web
- * Copyright (c) 2024 Empathetech LLC. All rights reserved.
+ * Copyright (c) 2022-2025 Empathetech LLC. All rights reserved.
  * See LICENSE for distribution and usage details.
  */
 
 export 'fabulous.dart';
-export 'keys.dart';
 export 'wyrd_web_scaffold.dart';
