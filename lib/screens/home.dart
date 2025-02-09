@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ezWindowNamer(appTitle, Theme.of(context).colorScheme.primary);
+    ezWindowNamer(context, appTitle);
   }
 
   // Return the build //
