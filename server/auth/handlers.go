@@ -38,13 +38,13 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 	// Verify Kratos session
 	kratosSession, err := getKratosSession(cookieValue, isToken)
 	if err != nil {
-		var kratosError InvalidKratosSessionError
+		var kratosError InvalidSession
 		if errors.As(err, &kratosError) {
-			log.Printf("Invalid Kratos session cookie presented: %s", err)
+			log.Printf("Invalid cookie: %s", err)
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
-		log.Printf("Problem verifying Kratos session: %s", err)
+		log.Printf("Unable to verify session: %s", err)
 		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
 		return
 	}
@@ -52,7 +52,7 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 	// Retrieve account from Kratos session
 	account, err := kratosSession.CreateOrLoadAccount()
 	if err != nil {
-		log.Printf("Error retrieving account from Kratos session: %s", err)
+		log.Printf("Error retrieving account: %s", err)
 		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
 		return
 	}
@@ -72,14 +72,14 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 	session.Values[UserKey] = valuesJson
 	
 	if err := app.SESSION.Save(r, w, session); err != nil {
-		log.Printf("Error in session save: %s", err)
+		log.Printf("Unable to save session: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	
 	// Respond with user account JSON
 	accountJson, _ := ffjson.Marshal(account)
-	log.Printf("User values JSON: %+v", userValues)
+	log.Printf("User JSON: %+v", userValues)
 	w.Header().Add("Content-Type", "application/json")
 	w.Write(accountJson)
 }
@@ -90,7 +90,7 @@ func versionHandler(w http.ResponseWriter, r *http.Request) {
 	// Retrieve user from context
 	contextUser := r.Context().Value(CurrentUserContextKey)
 	if contextUser == nil {
-		log.Printf("No user account in request context")
+		log.Printf("The request context does not contain a user")
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -103,7 +103,7 @@ func versionHandler(w http.ResponseWriter, r *http.Request) {
 	session.Values[UserKey] = valuesJson
 	
 	if err := app.SESSION.Save(r, w, session); err != nil {
-		log.Printf("Error in session save: %s", err)
+		log.Printf("Unable to save session: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
