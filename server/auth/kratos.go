@@ -9,9 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/pquerna/ffjson/ffjson"
-	"gitlab.kbi.ai/developers/unwrappd-server/profile"
-	"gitlab.kbi.ai/developers/unwrappd-server/utils"
+	"github.com/pquerna/ffjson/ffjson"	
 	"gorm.io/gorm"
 )
 
