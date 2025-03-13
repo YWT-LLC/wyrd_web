@@ -7,8 +7,10 @@ import (
 	"strings"
 
 	"github.com/pquerna/ffjson/ffjson"
-	"gitlab.kbi.ai/developers/unwrappd-server/appcontext"
-	"gitlab.kbi.ai/developers/unwrappd-server/profile"
+)
+
+const (
+	SessionKey	= "session"
 )
 
 func sessionHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,11 +60,11 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 		profileCopy.Thumbnail = nil
 		userValues.Profile = &profileCopy
 	}
-	session, _ := app.SESS_STORE.Get(r, "session")
+	session, _ := app.SESSION.Get(r, "session")
 	valuesJson, _ := ffjson.Marshal(userValues)
 	session.Values["user"] = valuesJson
 	// saves session into response writer headers and returns response
-	sessionError := app.SESS_STORE.Save(r, w, session)
+	sessionError := app.SESSION.Save(r, w, session)
 	if sessionError != nil {
 		log.Printf("Error in session save: %s", sessionError)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -89,12 +91,12 @@ func HandleAppVersion(w http.ResponseWriter, r *http.Request) {
 
 	user := contextUser.(profile.Account)
 
-	session, _ := app.SESS_STORE.Get(r, "session")
+	session, _ := app.SESSION.Get(r, "session")
 
 	valuesJson, _ := ffjson.Marshal(user)
 	session.Values["user"] = valuesJson
 
-	sessionError := app.SESS_STORE.Save(r, w, session)
+	sessionError := app.SESSION.Save(r, w, session)
 	if sessionError != nil {
 		log.Printf("Error in session save: %s", sessionError)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
