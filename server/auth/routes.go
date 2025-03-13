@@ -13,13 +13,15 @@ type AuthKey string
 
 const (
 	SessionKey	= "session"
+	SessionTail	= "/session"
+	SessionPath	= "/auth/session"
 	AdminKey		= "admin"
 	UserKey			= AuthKey("currentUser")
 )
 
 func AddRoutes(router *mux.Router) {
-	router.Path("/session").Methods(http.MethodGet).Handler(http.HandlerFunc(sessionHandler))
-	router.Path("/session").Methods(http.MethodPut).Handler(ValidateSession(http.HandlerFunc(versionHandler)))
+	router.Path(SessionTail).Methods(http.MethodGet).Handler(http.HandlerFunc(sessionHandler))
+	router.Path(SessionTail).Methods(http.MethodPut).Handler(ValidateSession(http.HandlerFunc(versionHandler)))
 }
 
 func ValidateSession(next http.Handler) http.Handler {
@@ -28,21 +30,21 @@ func ValidateSession(next http.Handler) http.Handler {
 		
 		session, _ := app.SESSION.Get(r, SessionKey)
 		if session.IsNew {
-			log.Println("unable to find existing session")
-			http.Redirect(w, r, "/auth/session", http.StatusSeeOther)
+			log.Println("No session found")
+			http.Redirect(w, r, SessionPath, http.StatusSeeOther)
 			return
 		}
 		
 		currentUserJson, ok := session.Values[UserSessionKey]
 		if !ok {
-			log.Println("error session doesn't contain user information")
+			log.Println("The session does not contain a user")
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 		
 		var currentUser profile.Account
 		if err := ffjson.Unmarshal(currentUserJson.([]byte), &currentUser); err != nil {
-			log.Println("error unmarshaling user information:", err)
+			log.Println("Unable to Unmarshal the user info:", err)
 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			return
 		}
