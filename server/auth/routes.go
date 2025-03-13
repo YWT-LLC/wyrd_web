@@ -19,7 +19,7 @@ const (
 
 func AddRoutes(router *mux.Router) {
 	router.Path("/session").Methods(http.MethodGet).Handler(http.HandlerFunc(sessionHandler))
-	router.Path("/session").Methods(http.MethodPut).Handler(ValidateSession(http.HandlerFunc(HandleAppVersion)))
+	router.Path("/session").Methods(http.MethodPut).Handler(ValidateSession(http.HandlerFunc(versionHandler)))
 }
 
 func ValidateSession(next http.Handler) http.Handler {
