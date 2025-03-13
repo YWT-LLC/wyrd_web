@@ -15,7 +15,6 @@ const (
 	SessionKey	= "session"
 	SessionTail	= "/session"
 	SessionPath	= "/auth/session"
-	AdminKey		= "admin"
 	UserKey			= AuthKey("currentUser")
 )
 
@@ -51,24 +50,5 @@ func ValidateSession(next http.Handler) http.Handler {
 		
 		ctx := context.WithValue(r.Context(), CurrentUserKey, currentUser)
 		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
-
-func ValidateAdmin(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		currentUser, ok := r.Context().Value(CurrentUserKey).(profile.Account)
-		if !ok {
-			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-			return
-		}
-		
-		for _, role := range currentUser.Roles {
-			if role == AdminKey {
-				next.ServeHTTP(w, r)
-				return
-			}
-		}
-		
-		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 	})
 }
