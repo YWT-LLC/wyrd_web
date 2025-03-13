@@ -50,7 +50,7 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	// Retrieve account from Kratos session
-	account, err := kratosSession.CreateOrLoadAccount()
+	account, err := kratosSession.FetchAccount()
 	if err != nil {
 		log.Printf("Error retrieving account: %s", err)
 		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
