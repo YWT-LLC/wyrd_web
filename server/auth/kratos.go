@@ -9,13 +9,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/pquerna/ffjson/ffjson"	
+	"github.com/pquerna/ffjson/ffjson"
 	"gorm.io/gorm"
 )
 
-type InvalidKratosSessionError error
+type InvalidSession error
 
-type VerifiableAddress struct {
+type EmailStatus struct {
 	Value    string `json:"value"`
 	Verified bool   `json:"verified"`
 }
@@ -24,10 +24,11 @@ type KratosSession struct {
 	Identity struct {
 		ID     uuid.UUID `json:"id"`
 		Traits struct {
-			Email string `json:"email"`
+			Name 	string 	`json:"name"`
+			Email *string `json:"email"`
 		} `json:"traits"`
-		VerifiableAddresses []VerifiableAddress    `json:"verifiable_addresses"`
-		MetadataPublic      map[string]interface{} `json:"metadata_public"`
+		EmailStatuses 			[]EmailStatus    				`json:"email_statuses"`
+		PublicMetadata      map[string]interface{}	`json:"public_metadata"`
 	} `json:"identity"`
 }
 
@@ -40,8 +41,9 @@ func init() {
 func getKratosSession(cookieString string, isToken bool) (*KratosSession, error) {
 	url, ok := os.LookupEnv("KRATOS_SESSION_URL")
 	if !ok {
-		return nil, errors.New("no KRATOS_SESSION_URL set in env")
+		return nil, errors.New("No KRATOS_SESSION_URL in env")
 	}
+
 	client := httpClient
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -64,40 +66,40 @@ func getKratosSession(cookieString string, isToken bool) (*KratosSession, error)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, InvalidKratosSessionError(fmt.Errorf("kratos returned %d", resp.StatusCode))
+		return nil, InvalidSession(fmt.Errorf("Kratos returned %d", resp.StatusCode))
 	}
 
-	var s KratosSession
+	var session KratosSession
 	dec := ffjson.NewDecoder()
-	err = dec.DecodeReader(resp.Body, &s)
+	err = dec.DecodeReader(resp.Body, &session)
 	if err != nil {
 		return nil, err
 	}
-	return &s, nil
+	return &session, nil
 }
 
-func (s *KratosSession) CreateOrLoadAccount() (*profile.Account, error) {
-	ID := s.Identity.ID
-	log.Printf("Identity in CreateOrLoad: %v, ID: %v", s.Identity, s.Identity.ID)
-	a := new(profile.Account)
-	a.ID = &ID
-	a.ProfileID = &ID
-	err := a.LoadByID()
-	if err != nil {
-		log.Printf("Error in CreateOrLoad LoadByID ACCOUNT: %v", err)
+func (session *KratosSession) FetchAccount() (*profile.Account, error) {
+	ID := session.Identity.ID
+	log.Printf("Fetched Identity: %v, ID: %v", session.Identity, session.Identity.ID)
+
+	account := new(profile.Account)
+	account.ID = &ID
+	account.ProfileID = &ID
+
+	if err := account.LoadByID(); err != nil {
+		log.Printf("LoadByID error: %v", err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			if err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
-					a = &profile.Account{
+					account = &profile.Account{
 						UUIDBaseModel: utils.UUIDBaseModel{
 							ID: &ID,
 						},
-						DateOfBirth:   nil,
 						ProfileID:     nil,
-						Email:         s.Identity.Traits.Email,
-						EmailVerified: emailVerified(s.Identity.Traits.Email, s.Identity.VerifiableAddresses),
+						Email:         session.Identity.Traits.Email,
+						EmailVerified: getEmailStatus(session.Identity.Traits.Email, session.Identity.EmailStatuses),
 					}
-					if err := a.Create(); err != nil {
+					if err := account.Create(); err != nil {
 						return nil, err
 					}
 				}
@@ -105,30 +107,30 @@ func (s *KratosSession) CreateOrLoadAccount() (*profile.Account, error) {
 		}
 	}
 
-	if s.Identity.Traits.Email != a.Email {
-		a.Email = s.Identity.Traits.Email
-		a.EmailVerified = emailVerified(s.Identity.Traits.Email, s.Identity.VerifiableAddresses)
+	if session.Identity.Traits.Email != account.Email {
+		account.Email = session.Identity.Traits.Email
+		account.EmailVerified = getEmailStatus(session.Identity.Traits.Email, session.Identity.EmailStatuses)
 
-		if err := a.UpdateEmail(); err != nil {
+		if err := account.UpdateEmail(); err != nil {
 			log.Printf("Found new email in identity, error updating email in DB: %v", err)
 			return nil, err
 		}
 	}
 
-	roles, ok := s.Identity.MetadataPublic["roles"]
+	roles, ok := session.Identity.MetadataPublic["roles"]
 	if ok {
 		for _, v := range roles.([]interface{}) {
-			a.Roles = append(a.Roles, v.(string))
+			account.Roles = append(account.Roles, v.(string))
 		}
 	}
 
-	return a, nil
+	return account, nil
 }
 
-func emailVerified(targetAddress string, addresses []VerifiableAddress) bool {
-	for _, a := range addresses {
-		if a.Value == targetAddress {
-			return a.Verified
+func getEmailStatus(address string, statuses []EmailStatus) bool {
+	for _, account := range statuses {
+		if account.Value == address {
+			return account.Verified
 		}
 	}
 	return false
