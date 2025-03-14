@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta12
+kind: Config
+metadata:
+  name: smoke-signal-server
+build:
+  artifacts:
+  - image: smoke-signal/api
+  - image: smoke-signal/db
+    context: deploy/
+    docker:
+      dockerfile: deploy/db.Dockerfile
+  local:
+    push: false
+    useBuildkit: true
+manifests:
+  rawYaml:
+  - deploy/*.yaml
+deploy:
+  kubectl: {}
+  kubeContext: docker-desktop
+portForward:
+- resourceType: Pod
+  resourceName: api
+  port: 8080
+- resourceType: Pod
+  resourceName: db
+  port: 5432
