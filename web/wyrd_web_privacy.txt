@@ -1,6 +1,6 @@
 -- en --
 
-Smoke Signal Privacy Policy
+Wyrd.Web Privacy Policy
 
 Wyrd Web does not send data outside your configured social networks.
 
@@ -14,7 +14,7 @@ If you have any comments/questions/concerns, please contact support@empathetech.
 
 -- es (AI translated) --
 
-Política de privacidad de Smoke Signal
+Política de privacidad de Wyrd.Web
 
 Wyrd Web no envía datos fuera de tus redes sociales configuradas.
 
@@ -28,7 +28,7 @@ Si tienes algún comentario, pregunta o inquietud, comunícate con support@empat
 
 -- fr (AI translated) --
 
-Politique de confidentialité d'Smoke Signal
+Politique de confidentialité d'Wyrd.Web
 
 Wyrd Web n'envoie pas de données en dehors de vos réseaux sociaux configurés.
 
