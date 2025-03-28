@@ -16,7 +16,7 @@ void testSuite({
     testWidgets('home-screen', (WidgetTester tester) async {
       // Load the app //
 
-      debugPrint('Loading Wyrd.Web');
+      ezLog('Loading Wyrd.Web');
       await tester.pumpWidget(const WyrdWeb());
       await tester.pumpAndSettle();
     });
