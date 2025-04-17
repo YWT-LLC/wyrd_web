@@ -49,7 +49,7 @@ class WyrdWebScaffold extends StatelessWidget {
             controller.open();
           }
         },
-        icon: const Icon(Icons.more_vert),
+        icon: Icon(Icons.more_vert, semanticLabel: l10n.gOptions),
         tooltip: l10n.gOptions,
       ),
       menuChildren: <Widget>[
