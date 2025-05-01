@@ -65,9 +65,6 @@ void main() async {
     ),
     themeMode: EzConfig.getThemeMode(),
     localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-      const LocaleNamesLocalizationsDelegate(),
-      ...EFUILang.localizationsDelegates,
-      ...Lang.localizationsDelegates,
       EmpathetechFeedbackLocalizationsDelegate(),
     ],
     localeOverride: EzConfig.getLocale(),
@@ -158,7 +155,6 @@ class WyrdWeb extends StatelessWidget {
           const LocaleNamesLocalizationsDelegate(),
           ...EFUILang.localizationsDelegates,
           ...Lang.localizationsDelegates,
-          EmpathetechFeedbackLocalizationsDelegate(),
         },
         supportedLocales: Lang.supportedLocales,
         locale: EzConfig.getLocale(),
