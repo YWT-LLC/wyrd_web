@@ -16,8 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final Map<String, Object> testConfig = <String, Object>{
-    ...empathetechConfig,
-    isDarkThemeKey: true,
+    ...desktopEmpathConfig,
     appLocaleKey: <String>['fr'],
   };
 
@@ -25,9 +24,10 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   EzConfig.init(
-    assetPaths: <String>{},
     preferences: prefs,
     defaults: testConfig,
+    fallbackLang: await EFUILang.delegate.load(english),
+    assetPaths: <String>{},
   );
 
   group(
