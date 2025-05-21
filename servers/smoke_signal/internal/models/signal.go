@@ -10,7 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
-type User struct {
+// Signal //
+
+type Signal struct {
 	ID  				uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	GroupID			uuid.UUID `gorm:"type:uuid;not null"`
 	CreatorID		uuid.UUID `gorm:"type:uuid;not null"`
@@ -18,4 +20,13 @@ type User struct {
 	Description	string    `gorm:"not null"`
 	CreatedAt		time.Time
 	UpdatedAt		time.Time
+}
+
+// Membership //
+
+type SignalMember struct {
+	ID  			uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	SignalID	uuid.UUID `gorm:"type:uuid;not null"`
+	UserID		uuid.UUID `gorm:"type:uuid;not null"`
+	JoinedAt	time.Time
 }
