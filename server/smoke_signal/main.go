@@ -64,27 +64,10 @@ func mainRouter() *mux.Router {
 	sr := router.PathPrefix("/v1").Subrouter()
 	sr.HandleFunc("", RootHandler)
 	sr.Use(auth.SessionMiddleware)
-	cigar.AddRoutes(sr.PathPrefix("/cigar").Subrouter())
-	profile.AddRoutes(sr.PathPrefix("/profile").Subrouter())
-	wishlist.AddRoutes(sr.PathPrefix("/wishlist").Subrouter())
-	checkin.AddRoutes(sr.PathPrefix("/checkin").Subrouter())
-	feed.AddRoutes(sr.PathPrefix("/feed").Subrouter(), "/v1")
-	stats.AddRoutes(sr.PathPrefix("/stats").Subrouter())
-	bands.AddRoutes(sr.PathPrefix("/bands").Subrouter())
-	groups.AddRoutes(sr.PathPrefix("/groups").Subrouter())
-
-	v2sr := router.PathPrefix("/v2").Subrouter()
-	v2sr.HandleFunc("", RootHandler)
-	v2sr.Use(auth.SessionMiddleware)
-
-	feed.AddRoutes(v2sr.PathPrefix("/feed").Subrouter(), "/v2")
-	checkin.AddRoutes(v2sr.PathPrefix("/checkin").Subrouter())
-	groups.AddRoutes(v2sr.PathPrefix("/groups").Subrouter())
 
 	ar := router.PathPrefix("/auth").Subrouter()
 	auth.AddRoutes(ar)
-
-	adr := router.PathPrefix("/admin").Subrouter()
+	
 	adr.Use(auth.SessionMiddleware)
 	admin.AddRoutes(adr)
 
