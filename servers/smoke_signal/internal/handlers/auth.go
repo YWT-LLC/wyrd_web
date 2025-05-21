@@ -14,13 +14,13 @@ import (
 	"encoding/json"
 )
 
-type SignUpInput struct {
+type CredsInput struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
-	var input SignUpInput
+	var input CredsInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
@@ -49,4 +49,38 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	var input CredsInput
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	var user models.User
+	if err := db.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
+		http.Error(w, "User not found", http.StatusUnauthorized)
+		return
+	}
+
+	if !auth.CheckPasswordHash(input.Password, user.Password) {
+		http.Error(w, "Invalid password", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := auth.GenerateJWT(user.ID.String())
+	if err != nil {
+		http.Error(w, "Could not create token", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	// Invalidate the JWT token here if needed
+	// For stateless JWT, you might not need to do anything
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Logged out successfully"})
 }
