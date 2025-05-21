@@ -23,7 +23,8 @@ func main() {
 		log.Fatal("DB connect failed:", err)
 	}
 
-	http.HandleFunc("/signup", handlers.SignUp)
+	http.HandleFunc("/signUp", handlers.SignUp)
+	http.HandleFunc("/login", handlers.Login)
 
 	port := os.Getenv("PORT")
 	if port == "" {
