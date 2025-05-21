@@ -52,5 +52,5 @@ CREATE TABLE IF NOT EXISTS signal_memberships (
   signal_id UUID NOT NULL REFERENCES signals(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id),
   joined_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY (activity_id, user_id)
+  PRIMARY KEY (signal_id, user_id)
 );
