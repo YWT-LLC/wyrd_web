@@ -1,3 +1,8 @@
+/* wyrd_web
+ * Copyright (c) 2025 Empathetech LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT UNIQUE NOT NULL,
@@ -12,7 +17,6 @@ CREATE TABLE IF NOT EXISTS profiles (
   user_id UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   username TEXT UNIQUE NOT NULL,
   nickname TEXT,
-  thumbnail_path TEXT,
   bio TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -23,7 +27,6 @@ CREATE TABLE IF NOT EXISTS groups (
   name TEXT NOT NULL,
   description TEXT NOT NULL,
   visibility TEXT NOT NULL CHECK (visibility IN ('public', 'request', 'private')),
-  thumbnail_path TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -43,7 +46,6 @@ CREATE TABLE IF NOT EXISTS signals (
   creator_id UUID NOT NULL REFERENCES users(id),
   name TEXT NOT NULL,
   description TEXT NOT NULL,
-  thumbnail_path TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
