@@ -29,11 +29,7 @@ type CredsInput struct {
 
 type AuthResponse struct {
 	Token string `json:"token"`
-	User  struct {
-		ID       string `json:"id"`
-		Email    string `json:"email"`
-		Username string `json:"username"`
-	} `json:"user"`
+	ID    string `json:"id"`
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
@@ -50,12 +46,20 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{
-		Email:    input.Email,
+		Email:    strings.ToLower(input.Email),
 		Password: hashed,
 	}
 
-	if err := db.DB.Create(&user).Error; err != nil {
-		http.Error(w, "Could not create user", http.StatusInternalServerError)
+	err = db.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&user).Error; err != nil {
+			return err
+		}
+		profile.UserID = user.ID
+		return tx.Create(&profile).Error
+	})
+
+	if err != nil {
+		http.Error(w, "User creation failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -65,7 +69,11 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{"token": token})
+	var resp AuthResponse
+	resp.Token = token
+	resp.User.ID = user.ID.String()
+
+  json.NewEncoder(w).Encode(resp)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -92,7 +100,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{"token": token})
+	var resp AuthResponse
+	resp.Token = token
+	resp.User.ID = user.ID.String()
+
+  json.NewEncoder(w).Encode(resp)
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
