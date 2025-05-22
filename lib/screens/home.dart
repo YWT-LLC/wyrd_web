@@ -52,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               await ezCmd(
                 'kubectl config use-context docker-desktop -n default',
-                dir: '/Users/mwaldron/repos/flutter/wyrd_web',
+                dir:
+                    '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
                 onSuccess: doNothing,
                 onFailure: (_) {
                   return;
@@ -62,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
               await ezCmd(
                 'skaffold dev',
-                dir: '/Users/mwaldron/repos/flutter/wyrd_web',
+                dir:
+                    '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
                 onSuccess: doNothing,
                 onFailure: (_) {
                   return;
