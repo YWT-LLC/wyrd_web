@@ -7,7 +7,6 @@ import '../utils/export.dart';
 import '../widgets/export.dart';
 
 import 'package:flutter/material.dart';
-import 'package:efui_bios/efui_bios.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +17,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Gather theme data //
+
+  late final TextTheme textTheme = Theme.of(context).textTheme;
+
+  // Define the build data //
+
+  ValueNotifier<String> readout = ValueNotifier<String>('');
+  bool showReadout = false;
+
   // Set the page title //
 
   @override
@@ -32,11 +40,75 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(
-        margin: EdgeInsets.zero,
-        child: Container(
-          constraints: BoxConstraints(maxWidth: widthOf(context) * (2 / 3)),
-          child: const WebOfWyrd(),
-        ),
+        child: EzScrollView(children: <Widget>[
+          // Launch //
+          // Smoke Signal
+          EzTextIconButton(
+            onPressed: () async {
+              await ezCmd(
+                cmd,
+                dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
+                onSuccess: onSuccess,
+                onFailure: onFailure,
+                readout: readout,
+              );
+            },
+            icon: const Icon(Icons.launch),
+            label: 'Smoke Signal',
+          ),
+          const EzDivider(),
+
+          // Monitor //
+
+          // CLI
+          EzRow(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              EzText(
+                'Console',
+                style: textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              EzMargin(vertical: false),
+              EzIconButton(
+                onPressed: () => setState(() => showReadout = !showReadout),
+                icon: EzIcon(
+                  showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                ),
+              ),
+            ],
+          ),
+          EzMargin(),
+
+          // Readout
+          Visibility(
+            visible: showReadout,
+            child: Container(
+              constraints: BoxConstraints(
+                minWidth: widthOf(context) * 0.667,
+                maxWidth: widthOf(context) * 0.667,
+                maxHeight: heightOf(context) / 2,
+              ),
+              padding: EdgeInsets.all(EzConfig.get(marginKey)),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: ezRoundEdge,
+              ),
+              child: ValueListenableBuilder<String>(
+                valueListenable: readout,
+                builder: (_, String value, __) => EzScrollView(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Text(
+                    value,
+                    style: textTheme.bodyLarge,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const EzSeparator(),
+        ]),
       ),
       fab: SettingsFAB(context),
     );
