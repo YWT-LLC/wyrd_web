@@ -19,6 +19,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // Gather theme data //
 
+  final double margin = EzConfig.get(marginKey);
+  final double spacing = EzConfig.get(spacingKey);
+
   late final TextTheme textTheme = Theme.of(context).textTheme;
 
   // Define the build data //
@@ -41,15 +44,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return WyrdWebScaffold(
       body: EzScreen(
         child: EzScrollView(children: <Widget>[
+          if (spacing > margin) EzSpacer(space: spacing - margin),
+
           // Launch //
           // Smoke Signal
           EzTextIconButton(
             onPressed: () async {
               await ezCmd(
-                cmd,
+                'kubectl config use-context docker-desktop -n default',
                 dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
-                onSuccess: onSuccess,
-                onFailure: onFailure,
+                onSuccess: doNothing,
+                onFailure: (_) => doNothing,
+                readout: readout,
+              );
+
+              await ezCmd(
+                'skaffold dev',
+                dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
+                onSuccess: doNothing,
+                onFailure: (_) => doNothing,
                 readout: readout,
               );
             },
