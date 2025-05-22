@@ -2,7 +2,7 @@
 # Copyright (c) 2025 Empathetech LLC. All rights reserved.
 # See LICENSE for distribution and usage details.
 
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 RUN apk add build-base
 
 WORKDIR /build
@@ -11,6 +11,7 @@ COPY go.mod go.sum /build/
 RUN go mod download
 
 COPY . /build
+
 VOLUME [ "/root/.cache" ]
 RUN --mount=type=cache,target=/root/.cache/go-build go build -o main -buildvcs=false .
 
@@ -20,7 +21,7 @@ USER appuser
 
 COPY --from=builder /build/main /app/
 COPY openapi.yaml /app 
-COPY migrations/migrations/ /app/migrations/
+COPY migrations/ /app/migrations/
 
 WORKDIR /app
 
