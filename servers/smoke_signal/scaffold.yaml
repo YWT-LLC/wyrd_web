@@ -1,0 +1,37 @@
+# wyrd_web
+# Copyright (c) 2025 Empathetech LLC. All rights reserved.
+# See LICENSE for distribution and usage details.
+
+apiVersion: skaffold/v4beta13
+kind: Config
+
+metadata:
+  name: smoke-signal
+
+build:
+  artifacts:
+  - image: smoke-signal/api
+  - image: smoke-signal/db
+    context: deploy/dev/
+    docker:
+      dockerfile: deploy/dev/db.Dockerfile
+  
+  local:
+    push: false
+    useBuildkit: true
+
+manifests:
+  rawYaml:
+  - deploy/dev/*.yaml
+
+deploy:
+  kubectl: {}
+  kubeContext: docker-desktop
+
+portForward:
+- resourceType: Pod
+  resourceName: api
+  port: 8080
+- resourceType: Pod
+  resourceName: db
+  port: 5432
