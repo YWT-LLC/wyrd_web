@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Define the build data //
 
   ValueNotifier<String> readout = ValueNotifier<String>('');
-  bool showReadout = false;
+  bool showReadout = true;
 
   // Set the page title //
 
@@ -54,7 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'kubectl config use-context docker-desktop -n default',
                 dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
                 onSuccess: doNothing,
-                onFailure: (_) => doNothing,
+                onFailure: (_) {
+                  return;
+                },
                 readout: readout,
               );
 
@@ -62,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'skaffold dev',
                 dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
                 onSuccess: doNothing,
-                onFailure: (_) => doNothing,
+                onFailure: (_) {
+                  return;
+                },
                 readout: readout,
               );
             },
