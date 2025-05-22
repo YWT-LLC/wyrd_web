@@ -3,9 +3,11 @@
 # See LICENSE for distribution and usage details.
 
 openapi: "3.1.0"
+
 info:
   title: Smoke Signal API
   version: "1.0.0"
+
 paths:
   /status:
     get:
