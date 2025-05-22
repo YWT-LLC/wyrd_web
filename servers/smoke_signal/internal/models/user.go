@@ -22,8 +22,8 @@ type User struct {
 type Profile struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	UserID    uuid.UUID `gorm:"type:uuid;not null"`
-	UserName  string    `gorm:"not null"`
-	NickName  string    `gorm:"not null"`
+	Username  string    `gorm:"not null"`
+	Nickname  string    `gorm:"not null"`
 	Bio			 	string
 	CreatedAt time.Time
 	UpdatedAt time.Time
