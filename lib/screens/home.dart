@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Launch //
           // Smoke Signal
-          EzTextIconButton(
+          EzElevatedIconButton(
             onPressed: () async {
               await ezCmd(
                 'kubectl config use-context docker-desktop -n default',
