@@ -52,23 +52,23 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               await ezCmd(
                 'kubectl config use-context docker-desktop -n default',
-                dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
+                dir: '/Users/mwaldron/repos/flutter/wyrd_web',
                 onSuccess: doNothing,
                 onFailure: (_) {
                   return;
                 },
                 readout: readout,
-              );
+              ); // TODO: Don't hard-code dir
 
               await ezCmd(
                 'skaffold dev',
-                dir: '~/repos/flutter/wyrd_web', // TODO: Not hard-coded
+                dir: '/Users/mwaldron/repos/flutter/wyrd_web',
                 onSuccess: doNothing,
                 onFailure: (_) {
                   return;
                 },
                 readout: readout,
-              );
+              ); // TODO: Ditto
             },
             icon: const Icon(Icons.launch),
             label: 'Smoke Signal',
