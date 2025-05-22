@@ -1,0 +1,48 @@
+# wyrd_web
+# Copyright (c) 2025 Empathetech LLC. All rights reserved.
+# See LICENSE for distribution and usage details.
+
+openapi: "3.1.0"
+info:
+  title: Smoke Signal API
+  version: "1.0.0"
+paths:
+  /status:
+    get:
+      description: Get the Smoke Signal API status
+      responses:
+        '200':
+          description: OK
+
+  /profile:
+    get:
+      description: Get the user's profile
+      responses: 
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+    post:
+      description: Register a new profile
+      responses:
+        '201':
+          description: Profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+    put:
+      description: Update the user's profile
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+        '404':
+          description: Profile not found
+                
+          
