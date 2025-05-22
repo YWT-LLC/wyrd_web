@@ -6,17 +6,34 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+
+	"golang.org/x/crypto/bcrypt"
+	
+	"gorm.io/gorm"
+
 	"smoke-signal/internal/auth"
 	"smoke-signal/internal/db"
 	"smoke-signal/internal/models"
-
-	"encoding/json"
 )
 
 type CredsInput struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type AuthResponse struct {
+	Token string `json:"token"`
+	User  struct {
+		ID       string `json:"id"`
+		Email    string `json:"email"`
+		Username string `json:"username"`
+	} `json:"user"`
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
