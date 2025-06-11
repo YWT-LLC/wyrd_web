@@ -12,8 +12,7 @@ class ImageSettingsScreen extends StatelessWidget {
   const ImageSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => WyrdWebScaffold(
-        body: const EzImageSettings(),
-        fab: EzBackFAB(context),
+  Widget build(BuildContext context) => const WyrdWebScaffold(
+        body: EzImageSettings(),
       );
 }
