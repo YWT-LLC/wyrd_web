@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return;
                 },
                 readout: readout,
-              ); // TODO: Don't hard-code dir
+              ); // Needs fix: don't hard-code dir
 
               await ezCmd(
                 'skaffold dev',
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return;
                 },
                 readout: readout,
-              ); // TODO: Ditto
+              ); // Ditto
             },
             icon: const Icon(Icons.launch),
             label: 'Smoke Signal',
