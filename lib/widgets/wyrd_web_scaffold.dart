@@ -63,46 +63,42 @@ class WyrdWebScaffold extends StatelessWidget {
 
     // Return the build //
 
-    final Widget theBuild = SelectionArea(
-      child: Scaffold(
-        // AppBar
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, toolbarHeight),
-          child: AppBar(
-            excludeHeaderSemantics: true,
-            toolbarHeight: toolbarHeight,
+    return EzAdaptiveScaffold(
+      small: SelectionArea(
+        child: Scaffold(
+          // AppBar
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, toolbarHeight),
+            child: AppBar(
+              excludeHeaderSemantics: true,
+              toolbarHeight: toolbarHeight,
 
-            // Leading (aka left)
-            leading: isLefty ? options : null,
-            leadingWidth: toolbarHeight,
+              // Leading (aka left)
+              leading: isLefty ? options : null,
+              leadingWidth: toolbarHeight,
 
-            // Title
-            title: const Text(appTitle),
+              // Title
+              title: const Text(appTitle),
 
-            // Actions (aka trailing aka right)
-            actions:
-                isLefty ? const <Widget>[EzBackAction()] : <Widget>[options],
+              // Actions (aka trailing aka right)
+              actions:
+                  isLefty ? const <Widget>[EzBackAction()] : <Widget>[options],
+            ),
           ),
+
+          // Body
+          body: body,
+
+          // FAB
+          floatingActionButton: fab,
+          floatingActionButtonLocation: isLefty
+              ? FloatingActionButtonLocation.startFloat
+              : FloatingActionButtonLocation.endFloat,
+
+          // Prevents the keyboard from pushing the body up
+          resizeToAvoidBottomInset: false,
         ),
-
-        // Body
-        body: body,
-
-        // FAB
-        floatingActionButton: fab,
-        floatingActionButtonLocation: isLefty
-            ? FloatingActionButtonLocation.startFloat
-            : FloatingActionButtonLocation.endFloat,
-
-        // Prevents the keyboard from pushing the body up
-        resizeToAvoidBottomInset: false,
       ),
-    );
-
-    return EzSwapScaffold(
-      small: theBuild,
-      large: theBuild,
-      threshold: smallBreakpoint,
     );
   }
 }
