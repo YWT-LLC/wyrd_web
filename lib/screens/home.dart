@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
               maxWidth: widthOf(context) * 0.667,
               maxHeight: heightOf(context) / 2,
             ),
-            padding: EdgeInsets.all(EzConfig.margining),
+            padding: EdgeInsets.all(EzConfig.marginVal),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceDim,
               borderRadius: ezRoundEdge,

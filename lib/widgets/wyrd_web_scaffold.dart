@@ -4,7 +4,6 @@
  */
 
 import '../utils/export.dart';
-import 'package:efui_bios/efui_bios.dart';
 
 import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
@@ -27,43 +26,18 @@ class WyrdWebScaffold extends StatelessWidget {
     // Gather the theme data //
 
     final bool isLefty = EzConfig.get(isLeftyKey) ?? false;
-    final EFUILang l10n = EFUILang.of(context)!;
 
     final Size appBarTextSize = ezTextSize(
-      appTitle,
+      appName,
       style: Theme.of(context).appBarTheme.titleTextStyle,
       context: context,
     );
 
-    final double toolbarHeight =
-        appBarTextSize.height + EzConfig.get(marginKey);
-
-    // Define custom widgets //
-
-    late final MenuAnchor options = MenuAnchor(
-      builder: (_, MenuController controller, ___) => IconButton(
-        onPressed: () {
-          if (controller.isOpen) {
-            controller.close();
-          } else {
-            controller.open();
-          }
-        },
-        icon: Icon(Icons.more_vert, semanticLabel: l10n.gOptions),
-        tooltip: l10n.gOptions,
-      ),
-      menuChildren: <Widget>[
-        EzFeedbackMenuButton(
-          parentContext: context,
-          appName: appTitle,
-          supportEmail: empathSupport,
-        ),
-      ],
-    );
+    final double toolbarHeight = appBarTextSize.height + EzConfig.marginVal;
 
     // Return the build //
 
-    return EzAdaptiveScaffold(
+    return EzAdaptiveParent(
       small: SelectionArea(
         child: Scaffold(
           // AppBar
@@ -74,15 +48,14 @@ class WyrdWebScaffold extends StatelessWidget {
               toolbarHeight: toolbarHeight,
 
               // Leading (aka left)
-              leading: isLefty ? options : null,
+              leading: null,
               leadingWidth: toolbarHeight,
 
               // Title
-              title: const Text(appTitle),
+              title: const Text(appName),
 
               // Actions (aka trailing aka right)
-              actions:
-                  isLefty ? const <Widget>[EzBackAction()] : <Widget>[options],
+              actions: isLefty ? const <Widget>[EzBackAction()] : null,
             ),
           ),
 
