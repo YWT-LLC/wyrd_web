@@ -17,14 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Gather theme data //
-
-  final double margin = EzConfig.get(marginKey);
-  final double spacing = EzConfig.get(spacingKey);
+  // Define the build data //
 
   late final TextTheme textTheme = Theme.of(context).textTheme;
-
-  // Define the build data //
 
   ValueNotifier<String> readout = ValueNotifier<String>('');
   bool showReadout = true;
@@ -34,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ezWindowNamer(context, appTitle);
+    ezWindowNamer(context, appName);
   }
 
   // Return the build //
@@ -43,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
       body: EzScreen(EzScrollView(children: <Widget>[
-        if (spacing > margin) EzSpacer(space: spacing - margin),
+        EzHeader(),
 
         // Launch //
         // Smoke Signal
@@ -107,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
               maxWidth: widthOf(context) * 0.667,
               maxHeight: heightOf(context) / 2,
             ),
-            padding: EdgeInsets.all(EzConfig.get(marginKey)),
+            padding: EdgeInsets.all(EzConfig.margining),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceDim,
               borderRadius: ezRoundEdge,
