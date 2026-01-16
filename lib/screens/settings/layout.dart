@@ -3,18 +3,17 @@
  * See LICENSE for distribution and usage details.
  */
 
+import '../../utils/export.dart';
 import '../../widgets/export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
-class ColorSettingsScreen extends StatelessWidget {
-  final EzCSType? target;
-
-  const ColorSettingsScreen({super.key, this.target});
+class LayoutSettingsScreen extends StatelessWidget {
+  const LayoutSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => WyrdWebScaffold(
-        body: EzColorSettings(target: target),
+  Widget build(BuildContext context) => const WyrdWebScaffold(
+        body: EzLayoutSettings(appName: appName),
       );
 }

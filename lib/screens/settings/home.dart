@@ -4,6 +4,7 @@
  */
 
 import '../export.dart';
+import '../../utils/consts.dart';
 import '../../widgets/export.dart';
 
 import 'package:flutter/material.dart';
@@ -15,10 +16,11 @@ class SettingsHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const WyrdWebScaffold(
         body: EzSettingsHome(
-          textSettingsPath: textSettingsPath,
-          layoutSettingsPath: layoutSettingsPath,
+          appName: appName,
           colorSettingsPath: colorSettingsPath,
-          imageSettingsPath: imageSettingsPath,
+          designSettingsPath: designSettingsPath,
+          layoutSettingsPath: layoutSettingsPath,
+          textSettingsPath: textSettingsPath,
         ),
       );
 }

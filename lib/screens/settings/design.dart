@@ -3,16 +3,17 @@
  * See LICENSE for distribution and usage details.
  */
 
+import '../../utils/export.dart';
 import '../../widgets/export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
-class ImageSettingsScreen extends StatelessWidget {
-  const ImageSettingsScreen({super.key});
+class DesignSettingsScreen extends StatelessWidget {
+  const DesignSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) => const WyrdWebScaffold(
-        body: EzImageSettings(),
+        body: EzDesignSettings(appName: appName),
       );
 }
