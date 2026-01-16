@@ -8,25 +8,26 @@
 export 'error.dart';
 export 'home.dart';
 
-export 'settings/settings_home.dart';
-export 'settings/text_settings.dart';
-export 'settings/layout_settings.dart';
-export 'settings/color_settings.dart';
-export 'settings/image_settings.dart';
+export 'settings/home.dart';
+
+export 'settings/color.dart';
+export 'settings/design.dart';
+export 'settings/layout.dart';
+export 'settings/text.dart';
 
 // Path names //
 
-/// 'settings'
+/// settings
 const String settingsPath = 'settings';
-
-/// 'text-settings'
-const String textSettingsPath = 'text-settings';
-
-/// 'layout-settings'
-const String layoutSettingsPath = 'layout-settings';
 
 /// 'color-settings'
 const String colorSettingsPath = 'color-settings';
 
-/// 'image-settings'
-const String imageSettingsPath = 'image-settings';
+/// 'design-settings'
+const String designSettingsPath = 'design-settings';
+
+/// 'layout-settings'
+const String layoutSettingsPath = 'layout-settings';
+
+/// 'text-settings'
+const String textSettingsPath = 'text-settings';

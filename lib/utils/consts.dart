@@ -4,4 +4,4 @@
  */
 
 /// 'Wyrd.Web'
-const String appTitle = 'Wyrd.Web';
+const String appName = 'Wyrd.Web';
