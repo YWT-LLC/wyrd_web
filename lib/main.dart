@@ -38,83 +38,12 @@ void main() async {
   runApp(const WyrdWeb());
 }
 
-// Define routes //
-
-final GoRouter router = GoRouter(
-  initialLocation: homePath,
-  errorBuilder: (_, GoRouterState state) => ErrorScreen(state.error),
-  routes: <RouteBase>[
-    GoRoute(
-      path: homePath,
-      name: homePath,
-      builder: (_, __) => const HomeScreen(),
-      routes: <RouteBase>[
-        GoRoute(
-          path: settingsPath,
-          name: settingsPath,
-          builder: (_, __) => const SettingsHomeScreen(),
-          routes: <RouteBase>[
-            GoRoute(
-              path: colorSettingsPath,
-              name: colorSettingsPath,
-              builder: (_, __) => const ColorSettingsScreen(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: EzCSType.quick.path,
-                  name: EzCSType.quick.name,
-                  builder: (_, __) =>
-                      const ColorSettingsScreen(target: EzCSType.quick),
-                ),
-                GoRoute(
-                  path: EzCSType.advanced.path,
-                  name: EzCSType.advanced.name,
-                  builder: (_, __) =>
-                      const ColorSettingsScreen(target: EzCSType.advanced),
-                ),
-              ],
-            ),
-            GoRoute(
-              path: designSettingsPath,
-              name: designSettingsPath,
-              builder: (_, __) => const DesignSettingsScreen(),
-            ),
-            GoRoute(
-              path: layoutSettingsPath,
-              name: layoutSettingsPath,
-              builder: (_, __) => const LayoutSettingsScreen(),
-            ),
-            GoRoute(
-              path: textSettingsPath,
-              name: textSettingsPath,
-              builder: (_, __) => const TextSettingsScreen(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: EzTSType.quick.path,
-                  name: EzTSType.quick.name,
-                  builder: (_, __) =>
-                      const TextSettingsScreen(target: EzTSType.quick),
-                ),
-                GoRoute(
-                  path: EzTSType.advanced.path,
-                  name: EzTSType.advanced.name,
-                  builder: (_, __) =>
-                      const TextSettingsScreen(target: EzTSType.advanced),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-  ],
-);
-
 class WyrdWeb extends StatelessWidget {
   const WyrdWeb({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return EzAppProvider(
+    return EzConfigurableApp(
       app: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: <LocalizationsDelegate<dynamic>>{
@@ -124,8 +53,84 @@ class WyrdWeb extends StatelessWidget {
         },
         supportedLocales: Lang.supportedLocales,
         locale: EzConfig.locale,
+
+        // App title
         title: appName,
-        routerConfig: router,
+
+        // App theme
+        themeMode: EzConfig.provider.themeMode,
+        darkTheme: EzConfig.provider.darkTheme,
+        theme: EzConfig.provider.lightTheme,
+
+        // Router (page) config
+        routerConfig: GoRouter(
+          initialLocation: homePath,
+          errorBuilder: (_, GoRouterState state) => ErrorScreen(state.error),
+          routes: <RouteBase>[
+            GoRoute(
+              path: homePath,
+              name: homePath,
+              builder: (_, __) => const HomeScreen(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: settingsPath,
+                  name: settingsPath,
+                  builder: (_, __) => const SettingsHomeScreen(),
+                  routes: <RouteBase>[
+                    GoRoute(
+                      path: colorSettingsPath,
+                      name: colorSettingsPath,
+                      builder: (_, __) => const ColorSettingsScreen(),
+                      routes: <RouteBase>[
+                        GoRoute(
+                          path: EzCSType.quick.path,
+                          name: EzCSType.quick.name,
+                          builder: (_, __) =>
+                              const ColorSettingsScreen(target: EzCSType.quick),
+                        ),
+                        GoRoute(
+                          path: EzCSType.advanced.path,
+                          name: EzCSType.advanced.name,
+                          builder: (_, __) => const ColorSettingsScreen(
+                              target: EzCSType.advanced),
+                        ),
+                      ],
+                    ),
+                    GoRoute(
+                      path: designSettingsPath,
+                      name: designSettingsPath,
+                      builder: (_, __) => const DesignSettingsScreen(),
+                    ),
+                    GoRoute(
+                      path: layoutSettingsPath,
+                      name: layoutSettingsPath,
+                      builder: (_, __) => const LayoutSettingsScreen(),
+                    ),
+                    GoRoute(
+                      path: textSettingsPath,
+                      name: textSettingsPath,
+                      builder: (_, __) => const TextSettingsScreen(),
+                      routes: <RouteBase>[
+                        GoRoute(
+                          path: EzTSType.quick.path,
+                          name: EzTSType.quick.name,
+                          builder: (_, __) =>
+                              const TextSettingsScreen(target: EzTSType.quick),
+                        ),
+                        GoRoute(
+                          path: EzTSType.advanced.path,
+                          name: EzTSType.advanced.name,
+                          builder: (_, __) => const TextSettingsScreen(
+                              target: EzTSType.advanced),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
