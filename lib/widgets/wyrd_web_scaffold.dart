@@ -23,9 +23,7 @@ class WyrdWebScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Gather the theme data //
-
-    final bool isLefty = EzConfig.get(isLeftyKey) ?? false;
+    // Gather the contextual theme data //
 
     final Size appBarTextSize = ezTextSize(
       appName,
@@ -55,7 +53,7 @@ class WyrdWebScaffold extends StatelessWidget {
               title: const Text(appName),
 
               // Actions (aka trailing aka right)
-              actions: isLefty ? const <Widget>[EzBackAction()] : null,
+              actions: EzConfig.isLefty ? const <Widget>[EzBackAction()] : null,
             ),
           ),
 
@@ -64,7 +62,7 @@ class WyrdWebScaffold extends StatelessWidget {
 
           // FAB
           floatingActionButton: fab,
-          floatingActionButtonLocation: isLefty
+          floatingActionButtonLocation: EzConfig.isLefty
               ? FloatingActionButtonLocation.startFloat
               : FloatingActionButtonLocation.endFloat,
 
