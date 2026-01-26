@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 Future<void> install({
-  required TargetPlatform platform,
   required String dir,
   required void Function() onSuccess,
   required void Function(String) onFailure,
   required ValueNotifier<String> readout,
 }) async {
-  switch (platform) {
+  switch (EzConfig.platform) {
     // Linux //
     case TargetPlatform.linux:
       // Check distro
