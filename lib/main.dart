@@ -29,7 +29,8 @@ void main() async {
     l10nFallback: await EFUILang.delegate.load(americanEnglish),
     preferences: await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
-          allowList: allEZConfigKeys.keys.toSet()),
+        allowList: allEZConfigKeys.keys.toSet(),
+      ),
     ),
   );
 
@@ -55,61 +56,112 @@ class WyrdWeb extends StatelessWidget {
         initialLocation: homePath,
         errorBuilder: (_, GoRouterState state) => ErrorScreen(state.error),
         routes: <RouteBase>[
+          // Home
           GoRoute(
             path: homePath,
             name: homePath,
-            builder: (_, __) => const HomeScreen(),
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                ezPageBuilder(context, state, const HomeScreen()),
             routes: <RouteBase>[
+              // Settings home
               GoRoute(
                 path: settingsPath,
                 name: settingsPath,
-                builder: (_, __) => const SettingsHomeScreen(),
+                pageBuilder: (BuildContext context, GoRouterState state) =>
+                    ezPageBuilder(context, state, const SettingsHomeScreen()),
                 routes: <RouteBase>[
+                  // Color settings
                   GoRoute(
                     path: colorSettingsPath,
                     name: colorSettingsPath,
-                    builder: (_, __) => const ColorSettingsScreen(),
+                    pageBuilder: (BuildContext context, GoRouterState state) =>
+                        ezPageBuilder(
+                      context,
+                      state,
+                      const ColorSettingsScreen(),
+                    ),
                     routes: <RouteBase>[
                       GoRoute(
                         path: EzCSType.quick.path,
                         name: EzCSType.quick.name,
-                        builder: (_, __) =>
-                            const ColorSettingsScreen(target: EzCSType.quick),
+                        pageBuilder:
+                            (BuildContext context, GoRouterState state) =>
+                                ezPageBuilder(
+                          context,
+                          state,
+                          const ColorSettingsScreen(target: EzCSType.quick),
+                        ),
                       ),
                       GoRoute(
                         path: EzCSType.advanced.path,
                         name: EzCSType.advanced.name,
-                        builder: (_, __) => const ColorSettingsScreen(
-                            target: EzCSType.advanced),
+                        pageBuilder:
+                            (BuildContext context, GoRouterState state) =>
+                                ezPageBuilder(
+                          context,
+                          state,
+                          const ColorSettingsScreen(target: EzCSType.advanced),
+                        ),
                       ),
                     ],
                   ),
+
+                  // Design settings
                   GoRoute(
                     path: designSettingsPath,
                     name: designSettingsPath,
-                    builder: (_, __) => const DesignSettingsScreen(),
+                    pageBuilder: (BuildContext context, GoRouterState state) =>
+                        ezPageBuilder(
+                      context,
+                      state,
+                      const DesignSettingsScreen(),
+                    ),
                   ),
+
+                  // Layout settings
                   GoRoute(
                     path: layoutSettingsPath,
                     name: layoutSettingsPath,
-                    builder: (_, __) => const LayoutSettingsScreen(),
+                    pageBuilder: (BuildContext context, GoRouterState state) =>
+                        ezPageBuilder(
+                      context,
+                      state,
+                      const LayoutSettingsScreen(),
+                    ),
                   ),
+
+                  // Text settings
                   GoRoute(
                     path: textSettingsPath,
                     name: textSettingsPath,
-                    builder: (_, __) => const TextSettingsScreen(),
+                    pageBuilder: (BuildContext context, GoRouterState state) =>
+                        ezPageBuilder(
+                      context,
+                      state,
+                      const TextSettingsScreen(),
+                    ),
                     routes: <RouteBase>[
                       GoRoute(
                         path: EzTSType.quick.path,
                         name: EzTSType.quick.name,
-                        builder: (_, __) =>
-                            const TextSettingsScreen(target: EzTSType.quick),
+                        pageBuilder:
+                            (BuildContext context, GoRouterState state) =>
+                                ezPageBuilder(
+                          context,
+                          state,
+                          const TextSettingsScreen(target: EzTSType.quick),
+                        ),
                       ),
                       GoRoute(
                         path: EzTSType.advanced.path,
                         name: EzTSType.advanced.name,
-                        builder: (_, __) =>
-                            const TextSettingsScreen(target: EzTSType.advanced),
+                        pageBuilder:
+                            (BuildContext context, GoRouterState state) =>
+                                ezPageBuilder(
+                          context,
+                          state,
+                          const TextSettingsScreen(target: EzTSType.advanced),
+                        ),
                       ),
                     ],
                   ),
