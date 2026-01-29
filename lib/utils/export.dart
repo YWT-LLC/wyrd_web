@@ -4,5 +4,7 @@
  */
 
 export 'consts.dart';
+export 'setup.dart';
+export 'wyrd_web_cache.dart';
 
 export '../l10n/lang.dart';
