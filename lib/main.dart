@@ -36,11 +36,23 @@ void main() async {
 
   // Run the app //
 
-  runApp(const WyrdWeb());
+  final (Locale storedLocale, EFUILang storedEFUILang) = await ezStoredL10n();
+  final Lang storedLang = await Lang.delegate.load(storedLocale);
+
+  runApp(WyrdWeb(storedLocale, storedEFUILang, storedLang));
 }
 
 class WyrdWeb extends StatelessWidget {
-  const WyrdWeb({super.key});
+  final Locale storedLocale;
+  final EFUILang storedEFUILang;
+  final Lang storedLang;
+
+  const WyrdWeb(
+    this.storedLocale,
+    this.storedEFUILang,
+    this.storedLang, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +63,9 @@ class WyrdWeb extends StatelessWidget {
         ...Lang.localizationsDelegates,
       },
       supportedLocales: Lang.supportedLocales,
+      locale: storedLocale,
+      el10n: storedEFUILang,
+      appCache: WyrdWebCache(storedLocale, l10n),
       appName: appName,
       routerConfig: GoRouter(
         initialLocation: homePath,
@@ -76,10 +91,7 @@ class WyrdWeb extends StatelessWidget {
                     name: colorSettingsPath,
                     pageBuilder: (BuildContext context, GoRouterState state) =>
                         ezPageBuilder(
-                      context,
-                      state,
-                      const ColorSettingsScreen(),
-                    ),
+                            context, state, const ColorSettingsScreen()),
                     routes: <RouteBase>[
                       GoRoute(
                         path: EzCSType.quick.path,
@@ -112,10 +124,7 @@ class WyrdWeb extends StatelessWidget {
                     name: designSettingsPath,
                     pageBuilder: (BuildContext context, GoRouterState state) =>
                         ezPageBuilder(
-                      context,
-                      state,
-                      const DesignSettingsScreen(),
-                    ),
+                            context, state, const DesignSettingsScreen()),
                   ),
 
                   // Layout settings
@@ -124,10 +133,7 @@ class WyrdWeb extends StatelessWidget {
                     name: layoutSettingsPath,
                     pageBuilder: (BuildContext context, GoRouterState state) =>
                         ezPageBuilder(
-                      context,
-                      state,
-                      const LayoutSettingsScreen(),
-                    ),
+                            context, state, const LayoutSettingsScreen()),
                   ),
 
                   // Text settings
@@ -136,10 +142,7 @@ class WyrdWeb extends StatelessWidget {
                     name: textSettingsPath,
                     pageBuilder: (BuildContext context, GoRouterState state) =>
                         ezPageBuilder(
-                      context,
-                      state,
-                      const TextSettingsScreen(),
-                    ),
+                            context, state, const TextSettingsScreen()),
                     routes: <RouteBase>[
                       GoRoute(
                         path: EzTSType.quick.path,

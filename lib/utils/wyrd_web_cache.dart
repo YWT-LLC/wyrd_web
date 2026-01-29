@@ -14,7 +14,7 @@ class WyrdWebCache extends EzAppCache {
   Locale _locale;
   Lang _l10n;
 
-  WyrdWebCache({required Locale locale, required Lang l10n})
+  WyrdWebCache(Locale locale, Lang l10n)
       : _locale = locale,
         _l10n = l10n;
 
