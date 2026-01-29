@@ -4,22 +4,21 @@
  */
 
 import '../utils/export.dart';
+import './export.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
   final Widget body;
 
-  /// [FloatingActionButton]
-  final Widget? fab;
+  /// [FloatingActionButton]s to add on top of the [EzUpdaterFAB]
+  /// BYO spacing widgets
+  final List<Widget>? fabs;
 
   /// Standardized [Scaffold] for all of the EFUI example app's screens
-  const WyrdWebScaffold({
-    super.key,
-    required this.body,
-    this.fab,
-  });
+  const WyrdWebScaffold(this.body, {super.key, this.fabs});
 
   @override
   Widget build(BuildContext context) {
@@ -36,38 +35,46 @@ class WyrdWebScaffold extends StatelessWidget {
     // Return the build //
 
     return EzAdaptiveParent(
-      small: SelectionArea(
-        child: Scaffold(
-          // AppBar
-          appBar: PreferredSize(
-            preferredSize: Size(double.infinity, toolbarHeight),
-            child: AppBar(
-              excludeHeaderSemantics: true,
-              toolbarHeight: toolbarHeight,
+      small: Consumer<EzConfigProvider>(
+        builder: (_, EzConfigProvider provider, __) => SelectionArea(
+          child: Scaffold(
+            key: ValueKey<int>(provider.seed),
 
-              // Leading (aka left)
-              leading: null,
-              leadingWidth: toolbarHeight,
+            // AppBar
+            appBar: PreferredSize(
+              preferredSize: Size(double.infinity, toolbarHeight),
+              child: AppBar(
+                excludeHeaderSemantics: true,
+                toolbarHeight: toolbarHeight,
 
-              // Title
-              title: const Text(appName),
+                // Leading (aka left)
+                leading: null,
+                leadingWidth: toolbarHeight,
 
-              // Actions (aka trailing aka right)
-              actions: EzConfig.isLefty ? const <Widget>[EzBackAction()] : null,
+                // Title
+                title: const Text(appName),
+
+                // Actions (aka trailing aka right)
+                actions:
+                    EzConfig.isLefty ? const <Widget>[EzBackAction()] : null,
+              ),
             ),
+
+            // Body
+            body: body,
+
+            // FAB
+            floatingActionButton: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[updater, if (fabs != null) ...fabs!],
+            ),
+            floatingActionButtonLocation: EzConfig.isLefty
+                ? FloatingActionButtonLocation.startFloat
+                : FloatingActionButtonLocation.endFloat,
+
+            // Prevents the keyboard from pushing the body up
+            resizeToAvoidBottomInset: false,
           ),
-
-          // Body
-          body: body,
-
-          // FAB
-          floatingActionButton: fab,
-          floatingActionButtonLocation: EzConfig.isLefty
-              ? FloatingActionButtonLocation.startFloat
-              : FloatingActionButtonLocation.endFloat,
-
-          // Prevents the keyboard from pushing the body up
-          resizeToAvoidBottomInset: false,
         ),
       ),
     );

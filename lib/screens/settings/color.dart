@@ -15,7 +15,6 @@ class ColorSettingsScreen extends StatelessWidget {
   const ColorSettingsScreen({super.key, this.target});
 
   @override
-  Widget build(BuildContext context) => WyrdWebScaffold(
-        body: EzColorSettings(target: target, appName: appName),
-      );
+  Widget build(BuildContext context) =>
+      WyrdWebScaffold(EzColorSettings(target: target, appName: appName));
 }

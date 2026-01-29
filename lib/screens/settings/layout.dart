@@ -13,7 +13,6 @@ class LayoutSettingsScreen extends StatelessWidget {
   const LayoutSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const WyrdWebScaffold(
-        body: EzLayoutSettings(appName: appName),
-      );
+  Widget build(BuildContext context) =>
+      const WyrdWebScaffold(EzLayoutSettings(appName: appName));
 }

@@ -19,17 +19,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // Define the build data //
 
-  late final TextTheme textTheme = Theme.of(context).textTheme;
-
   ValueNotifier<String> readout = ValueNotifier<String>('');
   bool showReadout = true;
 
   // Set the page title //
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ezWindowNamer(context, appName);
+  void initState() {
+    super.initState();
+    ezWindowNamer(appName);
   }
 
   // Return the build //
@@ -37,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WyrdWebScaffold(
-      body: EzScreen(EzScrollView(children: <Widget>[
+      EzScreen(EzScrollView(children: <Widget>[
         EzHeader(),
 
         // Launch //
@@ -79,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             EzText(
               'Console',
-              style: textTheme.titleLarge,
+              style: EzConfig.styles.titleLarge,
               textAlign: TextAlign.center,
             ),
             EzMargin(vertical: false),
@@ -104,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             padding: EdgeInsets.all(EzConfig.marginVal),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceDim,
+              color: EzConfig.colors.surfaceDim,
               borderRadius: ezRoundEdge,
             ),
             child: ValueListenableBuilder<String>(
@@ -113,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 child: Text(
                   value,
-                  style: textTheme.bodyLarge,
+                  style: EzConfig.styles.bodyLarge,
                   textAlign: TextAlign.start,
                 ),
               ),
@@ -122,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const EzSeparator(),
       ])),
-      fab: SettingsFAB(context),
+      fabs: <Widget>[EzConfig.spacer, SettingsFAB(context)],
     );
   }
 }

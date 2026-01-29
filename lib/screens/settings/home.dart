@@ -14,13 +14,11 @@ class SettingsHomeScreen extends StatelessWidget {
   const SettingsHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const WyrdWebScaffold(
-        body: EzSettingsHome(
-          appName: appName,
-          colorSettingsPath: colorSettingsPath,
-          designSettingsPath: designSettingsPath,
-          layoutSettingsPath: layoutSettingsPath,
-          textSettingsPath: textSettingsPath,
-        ),
-      );
+  Widget build(BuildContext context) => const WyrdWebScaffold(EzSettingsHome(
+        appName: appName,
+        colorSettingsPath: colorSettingsPath,
+        designSettingsPath: designSettingsPath,
+        layoutSettingsPath: layoutSettingsPath,
+        textSettingsPath: textSettingsPath,
+      ));
 }

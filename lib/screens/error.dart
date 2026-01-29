@@ -22,38 +22,34 @@ class _ErrorScreenState extends State<ErrorScreen> {
   // Set the page title //
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ezWindowNamer(context, '404 ${EzConfig.l10n.gError}');
+  void initState() {
+    super.initState();
+    ezWindowNamer(ez404());
   }
 
   // Return the build //
 
   @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return WyrdWebScaffold(
-      body: EzScreen(
+  Widget build(BuildContext context) => WyrdWebScaffold(EzScreen(
         Center(
           child: EzScrollView(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 EzConfig.l10n.g404Wonder,
-                style: ezSubTitleStyle(textTheme),
+                style: ezSubTitleStyle(),
                 textAlign: TextAlign.center,
               ),
               const EzSpacer(),
               Text(
                 EzConfig.l10n.g404,
-                style: textTheme.bodyLarge,
+                style: EzConfig.styles.bodyLarge,
                 textAlign: TextAlign.center,
               ),
               EzConfig.separator,
               Text(
                 EzConfig.l10n.g404Note,
-                style: textTheme.labelLarge,
+                style: EzConfig.styles.labelLarge,
                 textAlign: TextAlign.center,
               ),
               EzConfig.separator,
@@ -61,7 +57,5 @@ class _ErrorScreenState extends State<ErrorScreen> {
           ),
         ),
         useImageDecoration: false,
-      ),
-    );
-  }
+      ));
 }

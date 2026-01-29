@@ -15,7 +15,6 @@ class TextSettingsScreen extends StatelessWidget {
   const TextSettingsScreen({super.key, this.target});
 
   @override
-  Widget build(BuildContext context) => WyrdWebScaffold(
-        body: EzTextSettings(target: target, appName: appName),
-      );
+  Widget build(BuildContext context) =>
+      WyrdWebScaffold(EzTextSettings(target: target, appName: appName));
 }
