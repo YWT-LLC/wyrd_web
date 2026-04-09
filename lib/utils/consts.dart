@@ -5,3 +5,6 @@
 
 /// 'Wyrd.Web'
 const String appName = 'Wyrd.Web';
+
+/// net.empathetech.wyrd_web
+const String androidPackage = 'net.empathetech.wyrd_web';

@@ -11,11 +11,11 @@ import 'package:go_router/go_router.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class SettingsFAB extends FloatingActionButton {
-  /// [FloatingActionButton] that goes to the [SettingsHomeScreen]
+  /// [FloatingActionButton] that goes to the [SettingsHubScreen]
   SettingsFAB(BuildContext context, {super.key})
       : super(
           child: const Icon(Icons.settings),
-          onPressed: () => context.goNamed(settingsPath),
+          onPressed: () => context.goNamed(settingsHubPath),
           tooltip: l10n.gSettingsHint,
         );
 }
