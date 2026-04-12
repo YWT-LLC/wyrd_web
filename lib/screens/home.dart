@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: const Icon(Icons.launch),
           label: 'Smoke Signal',
         ),
-        const EzDivider(),
+        EzConfig.divider,
 
         // Monitor //
 
@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        const EzSeparator(),
+        EzConfig.separator,
       ])),
       fabs: <Widget>[EzConfig.spacer, SettingsFAB(context)],
     );

@@ -38,7 +38,7 @@ class _ErrorScreenState extends State<ErrorScreen> {
           style: EzConfig.styles.headlineLarge,
           textAlign: TextAlign.center,
         ),
-        const EzSpacer(),
+        EzConfig.spacer,
         Text(
           EzConfig.l10n.g404,
           style: ezSubTitleStyle(),
