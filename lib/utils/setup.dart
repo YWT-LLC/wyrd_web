@@ -142,7 +142,7 @@ gnome-extensions enable kstatusnotifieritem-support@gnome-shell-extensions''',
 
       // Download Docker
       if (readout.value.split('\n').last.trim() == 'arm') {
-        ezCmd(
+        await ezCmd(
           'curl https://desktop.docker.com/mac/main/arm64/$version/Docker.dmg',
           dir: dir,
           onSuccess: doNothing,
@@ -150,7 +150,7 @@ gnome-extensions enable kstatusnotifieritem-support@gnome-shell-extensions''',
           readout: readout,
         );
       } else {
-        ezCmd(
+        await ezCmd(
           'https://desktop.docker.com/mac/main/amd64/$version/Docker.dmg',
           dir: dir,
           onSuccess: doNothing,
