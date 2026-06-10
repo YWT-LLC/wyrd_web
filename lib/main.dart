@@ -21,9 +21,11 @@ void main() async {
 
   // Initialize EzConfig //
 
-  EzConfig.init(
+  EzCM.init(
+    appName: appName,
+    androidPackage: androidPackage,
     assetPaths: <String>{},
-    defaults: isMobile() ? empathMobileConfig : empathDesktopConfig,
+    orientations: DeviceOrientation.values,
     localeFallback: americanEnglish,
     l10nFallback: await EFUILang.delegate.load(americanEnglish),
     preferences: await SharedPreferencesWithCache.create(
@@ -31,6 +33,7 @@ void main() async {
         allowList: allEZConfigKeys.keys.toSet(),
       ),
     ),
+    defaults: isMobile() ? empathMobileConfig : empathDesktopConfig,
   );
 
   // Run the app //
@@ -67,25 +70,24 @@ class WyrdWeb extends StatelessWidget {
       supportedLocales: Lang.supportedLocales,
       locale: storedLocale,
       el10n: storedEFUILang,
-      appCache: WyrdWebCache(storedLocale, l10n),
-      appName: appName,
+      appCache: WyrdWebCache(storedLocale, storedLang),
       routerConfig: GoRouter(
         initialLocation: homePath,
-        errorBuilder: (_, GoRouterState state) => ErrorScreen(state.error),
+        errorBuilder: (_, GoRouterState state) => const ErrorScreen(),
         routes: <RouteBase>[
           // Home
           GoRoute(
             path: homePath,
             name: homePath,
-            pageBuilder: (BuildContext context, GoRouterState state) =>
-                ezPageBuilder(context, state, HomeScreen()),
+            pageBuilder: (BuildContext pbc, GoRouterState pbs) =>
+                ezPageBuilder(configWatcher(pbc), pbc, pbs, const HomeScreen()),
             routes: <RouteBase>[
               // Settings
               GoRoute(
                 path: settingsHubPath,
                 name: settingsHubPath,
-                pageBuilder: (BuildContext context, GoRouterState state) =>
-                    ezPageBuilder(context, state, SettingsHubScreen()),
+                pageBuilder: (BuildContext pbc, GoRouterState pbs) =>
+                    ezPageBuilder(configWatcher(pbc), pbc, pbs, const SettingsHubScreen()),
               ),
             ],
           ),

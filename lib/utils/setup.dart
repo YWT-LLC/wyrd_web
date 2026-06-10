@@ -12,7 +12,7 @@ Future<void> install({
   required void Function(String) onFailure,
   required ValueNotifier<String> readout,
 }) async {
-  switch (EzConfig.platform) {
+  switch (EzCM.platform) {
     // Linux //
     case TargetPlatform.linux:
       // Check distro

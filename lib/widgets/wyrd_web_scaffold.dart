@@ -10,45 +10,31 @@ import 'package:provider/provider.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
-  /// [Scaffold.body] passthrough
+  final EzCP config;
   final Widget body;
-
-  /// [FloatingActionButton]s to add on top of the [EzUpdaterFAB]
-  /// BYO spacing widgets
   final List<Widget>? fabs;
+  final bool isHome;
 
-  /// Standardized [Scaffold] for all of the EFUI example app's screens
-  const WyrdWebScaffold(this.body, {super.key, this.fabs});
+  const WyrdWebScaffold(
+    this.config, {
+    super.key,
+    required this.body,
+    this.fabs,
+    this.isHome = false,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    // Return the build //
-
-    return EzAdaptiveParent(
-      small: Consumer<EzConfigProvider>(
-        builder: (_, EzConfigProvider config, __) => SelectionArea(
-          child: Scaffold(
-            key: ValueKey<int>(config.seed),
+  Widget build(BuildContext context) => EzAdaptiveParent(
+        small: Consumer<EzCP>(
+          builder: (_, EzCP config, __) => EzScaffold(
+            config,
             body: body,
-            floatingActionButton: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                updater,
-                if (fabs != null) ...fabs!,
-                if (config.layout.showBackFAB &&
-                    ezRootNav.currentState!.canPop()) ...<Widget>[
-                  config.layout.spacer,
-                  const EzBackFAB(),
-                ],
-              ],
-            ),
-            floatingActionButtonLocation: EzConfig.isLefty
-                ? FloatingActionButtonLocation.startFloat
-                : FloatingActionButtonLocation.endFloat,
-            resizeToAvoidBottomInset: false,
+            fabs: <Widget>[
+              updater(config),
+              if (fabs != null) ...fabs!,
+              ...config.backFABs(isHome),
+            ],
           ),
         ),
-      ),
-    );
-  }
+      );
 }

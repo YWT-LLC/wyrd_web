@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class WyrdWebCache extends EzAppCache {
-  // Construct //
-
   Locale _locale;
   Lang _l10n;
 
@@ -18,22 +16,20 @@ class WyrdWebCache extends EzAppCache {
       : _locale = locale,
         _l10n = l10n;
 
-  // Get //
-
   Lang get l10n => _l10n;
-
-  // Set //
 
   @override
   void init(_) {}
 
   @override
-  Future<void> rebuild() async {
-    if (_locale != EzConfig.locale) {
-      _l10n = await Lang.delegate.load(EzConfig.locale);
-      _locale = EzConfig.locale;
+  Future<void> rebuild(EzCP config) async {
+    if (_locale != config.locale) {
+      _l10n = await Lang.delegate.load(config.locale);
+      _locale = config.locale;
     }
   }
 }
 
-Lang get l10n => (EzConfig.appCache! as WyrdWebCache).l10n;
+WyrdWebCache _cache(EzCP config) => config.appCache as WyrdWebCache;
+
+Lang l10n(EzCP config) => _cache(config).l10n;

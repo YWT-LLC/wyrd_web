@@ -7,10 +7,11 @@ import '../utils/export.dart';
 import '../widgets/export.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen() : super(key: ValueKey<int>(EzConfig.seed));
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,93 +35,102 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WyrdWebScaffold(
-      EzScreen(EzScrollView(children: <Widget>[
-        EzHeader(),
+    return Consumer<EzCP>(
+      builder: (_, EzCP config, __) => WyrdWebScaffold(
+        config,
+        body: EzScreen(
+          config,
+          child: EzScrollView(config, children: <Widget>[
+            EzHeader(config),
 
-        // Launch //
-        // Smoke Signal
-        EzElevatedIconButton(
-          onPressed: () async {
-            await ezCmd(
-              'kubectl config use-context docker-desktop -n default',
-              dir:
-                  '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-              onSuccess: doNothing,
-              onFailure: (_) {
-                return;
+            // Launch //
+            // Smoke Signal
+            EzElevatedIconButton(
+              config,
+              onPressed: () async {
+                await ezCmd(
+                  'kubectl config use-context docker-desktop -n default',
+                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
+                  onSuccess: doNothing,
+                  onFailure: (_) {
+                    return;
+                  },
+                  readout: readout,
+                ); // Needs fix: don't hard-code dir
+
+                await ezCmd(
+                  'skaffold dev',
+                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
+                  onSuccess: doNothing,
+                  onFailure: (_) {
+                    return;
+                  },
+                  readout: readout,
+                ); // Ditto
               },
-              readout: readout,
-            ); // Needs fix: don't hard-code dir
-
-            await ezCmd(
-              'skaffold dev',
-              dir:
-                  '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-              onSuccess: doNothing,
-              onFailure: (_) {
-                return;
-              },
-              readout: readout,
-            ); // Ditto
-          },
-          icon: const Icon(Icons.launch),
-          label: 'Smoke Signal',
-        ),
-        EzConfig.divider,
-
-        // Monitor //
-
-        // CLI
-        EzRow(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            EzText(
-              'Console',
-              style: EzConfig.styles.titleLarge,
-              textAlign: TextAlign.center,
+              icon: const Icon(Icons.launch),
+              label: 'Smoke Signal',
             ),
-            EzMargin(vertical: false),
-            EzIconButton(
-              onPressed: () => setState(() => showReadout = !showReadout),
-              icon: Icon(
-                showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-              ),
-            ),
-          ],
-        ),
-        EzMargin(),
+            config.divider,
 
-        // Readout
-        Visibility(
-          visible: showReadout,
-          child: Container(
-            constraints: BoxConstraints(
-              minWidth: widthOf(context) * 0.667,
-              maxWidth: widthOf(context) * 0.667,
-              maxHeight: heightOf(context) / 2,
+            // Monitor //
+
+            // CLI
+            EzRow(
+              config,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                EzText(
+                  config,
+                  text: 'Console',
+                  style: config.titleStyle,
+                  textAlign: TextAlign.center,
+                ),
+                config.rowMargin,
+                EzIconButton(
+                  config,
+                  onPressed: () => setState(() => showReadout = !showReadout),
+                  icon: Icon(
+                    showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                  ),
+                ),
+              ],
             ),
-            padding: EdgeInsets.all(EzConfig.marginVal),
-            decoration: BoxDecoration(
-              color: EzConfig.colors.surfaceDim,
-              borderRadius: ezRoundEdge,
-            ),
-            child: ValueListenableBuilder<String>(
-              valueListenable: readout,
-              builder: (_, String value, __) => EzScrollView(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                child: Text(
-                  value,
-                  style: EzConfig.styles.bodyLarge,
-                  textAlign: TextAlign.start,
+            config.margin,
+
+            // Readout
+            Visibility(
+              visible: showReadout,
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: widthOf(context) * 0.667,
+                  maxWidth: widthOf(context) * 0.667,
+                  maxHeight: heightOf(context) / 2,
+                ),
+                padding: EdgeInsets.all(config.marginVal),
+                decoration: BoxDecoration(
+                  color: config.colors.surfaceDim,
+                  borderRadius: config.textRadius,
+                ),
+                child: ValueListenableBuilder<String>(
+                  valueListenable: readout,
+                  builder: (_, String value, __) => EzScrollView(
+                    config,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Text(
+                      value,
+                      style: config.bodyStyle,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+            config.separator,
+          ]),
         ),
-        EzConfig.separator,
-      ])),
-      fabs: <Widget>[EzConfig.spacer, SettingsFAB(context)],
+        fabs: <Widget>[config.spacer, SettingsFAB(config, parentContext: context)],
+      ),
     );
   }
 }
