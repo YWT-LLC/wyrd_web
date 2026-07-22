@@ -31,7 +31,7 @@ void main() async {
     preferences: await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(allowList: allEZConfigKeys.keys.toSet()),
     ),
-    defaults: isMobile() ? empathMobileConfig : empathDesktopConfig,
+    defaults: isMobile() ? ywtMobileConfig : ywtDesktopConfig,
   );
 
   // Run the app //
