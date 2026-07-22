@@ -1,5 +1,5 @@
 name: wyrd_web
-description: "Join the Wyrd-wide Web to build more Empathetech communities. Ones free from the controlling hand of tech giants."
+description: "Build communities on the Wyrd-Wide-Web. Free from the controlling hand of tech giants."
 version: 1.0.0+2
 publish_to: 'none'
 
@@ -21,11 +21,11 @@ dependencies:
   flutter_localized_locales: ^2.0.5
   provider: ^6.1.5+1
 
-  # Empathetech
-  efui_bios:
-    path: ../efui_bios/
-  empathetech_flutter_ui:
-    path: ../empathetech_flutter_ui/
+  # YWT
+  oui_bios:
+    path: ../oui_bios/
+  open_ui:
+    path: ../open_ui/
 
 dev_dependencies:
   dependency_validator: ^5.0.5

@@ -1,5 +1,5 @@
 /* wyrd_web
- * Copyright (c) 2026 Empathetech LLC. All rights reserved.
+ * Copyright (c) 2026 YWT (Empathetech LLC). All rights reserved.
  * See LICENSE for distribution and usage details.
  */
 
@@ -7,7 +7,7 @@ import './export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:empathetech_flutter_ui/empathetech_flutter_ui.dart';
+import 'package:open_ui/open_ui.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
   final EzCP config;
@@ -25,16 +25,12 @@ class WyrdWebScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => EzAdaptiveParent(
-        small: Consumer<EzCP>(
-          builder: (_, EzCP config, __) => EzScaffold(
-            config,
-            body: body,
-            fabs: <Widget>[
-              updater(config),
-              if (fabs != null) ...fabs!,
-              ...config.backFABs(isHome),
-            ],
-          ),
-        ),
-      );
+    small: Consumer<EzCP>(
+      builder: (_, EzCP config, __) => EzScaffold(
+        config,
+        body: body,
+        fabs: <Widget>[updater(config), if (fabs != null) ...fabs!, ...config.backFABs(isHome)],
+      ),
+    ),
+  );
 }
