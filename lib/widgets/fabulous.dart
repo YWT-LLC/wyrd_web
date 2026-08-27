@@ -14,18 +14,19 @@ class SettingsFAB extends FloatingActionButton {
   final EzCP config;
 
   SettingsFAB(this.config, {required BuildContext parentContext, super.key})
-    : super(
-        child: EzIcon(config, Icons.settings),
-        onPressed: () => parentContext.goNamed(settingsHubPath),
-        tooltip: l10n(config).gSettingsHint,
-      );
+      : super(
+          child: EzIcon(config, Icons.settings),
+          onPressed: () => parentContext.goNamed(settingsHubPath),
+          tooltip: l10n(config).gSettingsHint,
+        );
 }
 
 EzUpdaterFAB updater(EzCP config) => EzUpdaterFAB(
-  config,
-  appVersion: '1.0.0',
-  versionSource: 'https://raw.githubusercontent.com/YWT-LLC/wyrd_web/refs/heads/main/APP_VERSION',
-  gPlay: 'https://play.google.com/store/apps/details?id=llc.ywt.BLARG',
-  appStore: 'https://apps.apple.com/us/app/BLARG/BLARG',
-  github: 'https://github.com/YWT-LLC/wyrd_web/releases',
-);
+      config,
+      appVersion: '1.0.0',
+      versionSource:
+          'https://raw.githubusercontent.com/YWT-LLC/wyrd_web/refs/heads/main/APP_VERSION',
+      gPlay: 'https://play.google.com/store/apps/details?id=llc.ywt.wyrd_web',
+      appStore: 'https://apps.apple.com/us/app/BLARG/BLARG',
+      github: 'https://github.com/YWT-LLC/wyrd_web/releases',
+    );
