@@ -92,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   EzIconButton(
                     config,
                     onPressed: () => setState(() => showReadout = !showReadout),
+                    tooltip: 'Toggle readout',
                     icon: Icon(showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down),
                   ),
                 ],
