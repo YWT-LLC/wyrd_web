@@ -32,8 +32,8 @@ class SettingsHubScreen extends StatelessWidget {
                   config,
                   EzCM.onMobile
                       ? EzCM.platform == TargetPlatform.iOS
-                            ? Icons.phone_iphone
-                            : Icons.phone_android
+                          ? Icons.phone_iphone
+                          : Icons.phone_android
                       : Icons.computer,
                   semanticLabel: config.ezL10n.gGlobal,
                 ),

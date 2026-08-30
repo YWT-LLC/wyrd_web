@@ -25,12 +25,12 @@ class WyrdWebScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => EzAdaptiveParent(
-    small: Consumer<EzCP>(
-      builder: (_, EzCP config, __) => EzScaffold(
-        config,
-        body: body,
-        fabs: <Widget>[updater(config), if (fabs != null) ...fabs!, ...config.backFABs(isHome)],
-      ),
-    ),
-  );
+        small: Consumer<EzCP>(
+          builder: (_, EzCP config, __) => EzScaffold(
+            config,
+            body: body,
+            fabs: <Widget>[updater(config), if (fabs != null) ...fabs!, ...config.backFABs(isHome)],
+          ),
+        ),
+      );
 }
