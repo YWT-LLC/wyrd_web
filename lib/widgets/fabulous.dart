@@ -23,7 +23,7 @@ class SettingsFAB extends FloatingActionButton {
 
 EzUpdaterFAB updater(EzCP config) => EzUpdaterFAB(
       config,
-      appVersion: '1.0.0',
+      appVersion: '1.0.1',
       versionSource:
           'https://raw.githubusercontent.com/YWT-LLC/wyrd_web/refs/heads/main/APP_VERSION',
       gPlay: 'https://play.google.com/store/apps/details?id=llc.ywt.wyrd_web',
