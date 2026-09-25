@@ -5,10 +5,11 @@
 
 import '../screens/export.dart';
 import '../utils/export.dart';
+import 'package:ywt_private/ywt_private.dart' as ywt;
 
+import 'package:open_ui/open_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:open_ui/open_ui.dart';
 
 class SettingsFAB extends FloatingActionButton {
   final EzCP config;
@@ -28,5 +29,5 @@ EzUpdaterFAB updater(EzCP config) => EzUpdaterFAB(
           'https://raw.githubusercontent.com/YWT-LLC/wyrd_web/refs/heads/main/APP_VERSION',
       gPlay: 'https://play.google.com/store/apps/details?id=llc.ywt.wyrd_web',
       appStore: 'https://apps.apple.com/us/app/BLARG/BLARG',
-      github: 'https://github.com/YWT-LLC/wyrd_web/releases',
+      github: ywt.wyrdWebReleases,
     );
