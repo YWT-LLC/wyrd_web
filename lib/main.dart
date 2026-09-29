@@ -29,7 +29,9 @@ void main() async {
     localeFallback: americanEnglish,
     l10nFallback: await OUILang.delegate.load(americanEnglish),
     preferences: await SharedPreferencesWithCache.create(
-      cacheOptions: SharedPreferencesWithCacheOptions(allowList: allEZConfigKeys.keys.toSet()),
+      cacheOptions: SharedPreferencesWithCacheOptions(
+        allowList: allEZConfigKeys.keys.toSet(), // TODO
+      ),
     ),
     defaults: isMobile() ? ywtMobileConfig : ywtDesktopConfig,
   );
