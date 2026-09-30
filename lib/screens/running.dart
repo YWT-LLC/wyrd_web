@@ -26,7 +26,6 @@ class _RunningScreenState extends State<RunningScreen> {
   // Define the build data //
 
   ValueNotifier<String> readout = ValueNotifier<String>('');
-  bool showReadout = true;
 
   // Set the page title //
 
@@ -45,53 +44,36 @@ class _RunningScreenState extends State<RunningScreen> {
         config,
         body: EzScreen(
           config,
-          alignment: Alignment.center,
-          child:
-              EzScrollView(config, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            EzRow(
-              config,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                // Toggle
-                EzText(
+          alignment: Alignment.topCenter,
+          child: EzScrollView(config, children: <Widget>[
+            Container(
+              alignment: config.isLTR ? Alignment.topLeft : Alignment.topRight,
+              constraints: BoxConstraints(
+                minWidth: widthOf(context) * 0.5,
+                maxWidth: widthOf(context) * 0.75,
+                maxHeight: heightOf(context) * 0.75,
+              ),
+              child: ExpansionTile(
+                onExpansionChanged: (_) => setState(() {}),
+                title: EzText(
                   config,
                   text: 'Console',
                   style: config.titleStyle,
                   textAlign: TextAlign.center,
                 ),
-                config.rowMargin,
-                EzIconButton(
-                  config,
-                  onPressed: () => setState(() => showReadout = !showReadout),
-                  tooltip: 'Toggle readout',
-                  icon: Icon(showReadout ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
-                ),
-              ],
-            ),
-            config.margin,
-
-            // Readout
-            Visibility(
-              visible: showReadout,
-              child: Container(
-                constraints: BoxConstraints(
-                  minWidth: widthOf(context) * 0.667,
-                  maxWidth: widthOf(context) * 0.667,
-                  maxHeight: heightOf(context) / 2,
-                ),
-                padding: EdgeInsets.all(config.marginVal),
-                decoration: BoxDecoration(
-                  color: config.colors.surfaceDim,
-                  borderRadius: config.textRadius,
-                ),
-                child: ValueListenableBuilder<String>(
-                  valueListenable: readout,
-                  builder: (_, String value, __) => EzScrollView(
+                children: <Widget>[
+                  EzTextBackground(
                     config,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    child: Text(value, style: config.bodyStyle, textAlign: TextAlign.start),
+                    text: ValueListenableBuilder<String>(
+                      valueListenable: readout,
+                      builder: (_, String value, __) => Text(
+                        value,
+                        style: config.bodyStyle,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
 
