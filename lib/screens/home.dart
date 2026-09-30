@@ -3,12 +3,15 @@
  * See LICENSE for distribution and usage details.
  */
 
+import '../screens/export.dart';
 import '../utils/export.dart';
 import '../widgets/export.dart';
+import 'package:ywt_private/ywt_private.dart' as ywt;
 
+import 'package:open_ui/open_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:open_ui/open_ui.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,96 +43,100 @@ class _HomeScreenState extends State<HomeScreen> {
         config,
         body: EzScreen(
           config,
-          child: EzScrollView(
-            config,
-            children: <Widget>[
-              EzHeader(config),
+          alignment: Alignment.center,
+          child:
+              EzScrollView(config, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            // Launch //
 
-              // Launch //
-              // Smoke Signal
-              EzElevatedIconButton(
-                config,
-                onPressed: () async {
-                  await ezCmd(
-                    'kubectl config use-context docker-desktop -n default',
-                    dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-                    onSuccess: doNothing,
-                    onFailure: (_) {
-                      return;
-                    },
-                    readout: readout,
-                  ); // Needs fix: don't hard-code dir
+            // Smoke Signal
+            EzElevatedIconButton(
+              config,
+              onPressed: () async {
+                await ezCmd(
+                  'kubectl config use-context docker-desktop -n default',
+                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
+                  onSuccess: doNothing,
+                  onFailure: (_) {
+                    return;
+                  },
+                  readout: readout,
+                ); // Needs fix: don't hard-code dir
 
-                  await ezCmd(
-                    'skaffold dev',
-                    dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-                    onSuccess: doNothing,
-                    onFailure: (_) {
-                      return;
-                    },
-                    readout: readout,
-                  ); // Ditto
-                },
-                icon: const Icon(Icons.launch),
-                label: 'Smoke Signal',
-              ),
-              config.divider,
+                await ezCmd(
+                  'skaffold dev',
+                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
+                  onSuccess: doNothing,
+                  onFailure: (_) {
+                    return;
+                  },
+                  readout: readout,
+                ); // Ditto
+              },
+              icon: const Icon(Icons.launch),
+              label: 'Smoke Signal',
+            ),
+            config.divider,
 
-              // Monitor //
+            // Monitor //
 
-              // CLI
-              EzRow(
-                config,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  EzText(
+            EzRow(
+              config,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Toggle
+                EzText(
+                  config,
+                  text: 'Console',
+                  style: config.titleStyle,
+                  textAlign: TextAlign.center,
+                ),
+                config.rowMargin,
+                EzIconButton(
+                  config,
+                  onPressed: () => setState(() => showReadout = !showReadout),
+                  tooltip: 'Toggle readout',
+                  icon: Icon(showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                ),
+              ],
+            ),
+            config.margin,
+
+            // Readout
+            Visibility(
+              visible: showReadout,
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: widthOf(context) * 0.667,
+                  maxWidth: widthOf(context) * 0.667,
+                  maxHeight: heightOf(context) / 2,
+                ),
+                padding: EdgeInsets.all(config.marginVal),
+                decoration: BoxDecoration(
+                  color: config.colors.surfaceDim,
+                  borderRadius: config.textRadius,
+                ),
+                child: ValueListenableBuilder<String>(
+                  valueListenable: readout,
+                  builder: (_, String value, __) => EzScrollView(
                     config,
-                    text: 'Console',
-                    style: config.titleStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                  config.rowMargin,
-                  EzIconButton(
-                    config,
-                    onPressed: () => setState(() => showReadout = !showReadout),
-                    tooltip: 'Toggle readout',
-                    icon: Icon(showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                  ),
-                ],
-              ),
-              config.margin,
-
-              // Readout
-              Visibility(
-                visible: showReadout,
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: widthOf(context) * 0.667,
-                    maxWidth: widthOf(context) * 0.667,
-                    maxHeight: heightOf(context) / 2,
-                  ),
-                  padding: EdgeInsets.all(config.marginVal),
-                  decoration: BoxDecoration(
-                    color: config.colors.surfaceDim,
-                    borderRadius: config.textRadius,
-                  ),
-                  child: ValueListenableBuilder<String>(
-                    valueListenable: readout,
-                    builder: (_, String value, __) => EzScrollView(
-                      config,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      child: Text(value, style: config.bodyStyle, textAlign: TextAlign.start),
-                    ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Text(value, style: config.bodyStyle, textAlign: TextAlign.start),
                   ),
                 ),
               ),
-              config.separator,
-            ],
-          ),
+            ),
+
+            // Footer
+            EzFooter(config, a11howPath: ywt.wyrdWebContributeA11),
+          ]),
         ),
-        fabs: <Widget>[
-          config.spacer,
-          SettingsFAB(config, parentContext: context),
+        isHome: true,
+        actions: <HybridAction>[
+          HybridAction(
+            label: config.ezL10n.gSettings,
+            icon: Icons.settings,
+            onPressed: () => context.goNamed(settingsHubPath),
+          ),
         ],
       ),
     );
