@@ -44,39 +44,26 @@ class _HomeScreenState extends State<HomeScreen> {
         body: EzScreen(
           config,
           alignment: Alignment.center,
-          child:
-              EzScrollView(config, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            // Smoke Signal
-            EzElevatedIconButton(
-              config,
-              onPressed: () async {
-                await ezCmd(
-                  'kubectl config use-context docker-desktop -n default',
-                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-                  onSuccess: doNothing,
-                  onFailure: (_) {
-                    return;
-                  },
-                  readout: readout,
-                ); // Needs fix: don't hard-code dir
+          child: EzScrollView(
+            config,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Options
+              EzWrap(
+                children: Services.values
+                    .map((Services service) => EzElevatedIconButton(
+                          config,
+                          label: service.name,
+                          icon: service.icon(config),
+                          onPressed: () => context.goNamed(runningPath, extra: service),
+                        ))
+                    .toList(),
+              ),
 
-                await ezCmd(
-                  'skaffold dev',
-                  dir: '/Users/mwaldron/repos/flutter/wyrd_web/servers/smoke_signal',
-                  onSuccess: doNothing,
-                  onFailure: (_) {
-                    return;
-                  },
-                  readout: readout,
-                ); // Ditto
-              },
-              icon: const Icon(Icons.launch),
-              label: 'Smoke Signal',
-            ),
-
-            // Footer
-            EzFooter(config, a11howPath: ywt.wyrdWebContributeA11),
-          ]),
+              // Footer
+              EzFooter(config, a11howPath: ywt.wyrdWebContributeA11),
+            ],
+          ),
         ),
         isHome: true,
         actions: <HybridAction>[
