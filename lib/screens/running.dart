@@ -14,7 +14,9 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 class RunningScreen extends StatefulWidget {
-  const RunningScreen({super.key});
+  final Services toRun;
+
+  const RunningScreen(this.toRun, {super.key});
 
   @override
   State<RunningScreen> createState() => _RunningScreenState();
