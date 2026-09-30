@@ -64,19 +64,39 @@ class WyrdWeb extends StatelessWidget {
           initialLocation: homePath,
           errorBuilder: (_, __) => const ErrorScreen(),
           routes: <RouteBase>[
-            // Home
+            // Home/select service
             GoRoute(
               path: homePath,
               name: homePath,
-              pageBuilder: (BuildContext pbc, GoRouterState pbs) =>
-                  ezPageBuilder(configWatcher(pbc), pbc, pbs, const HomeScreen()),
+              pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
+                configWatcher(pbc),
+                pbc,
+                pbs,
+                const HomeScreen(),
+              ),
               routes: <RouteBase>[
+                // Run service
+                GoRoute(
+                  path: runningPath,
+                  name: runningPath,
+                  pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
+                    configWatcher(pbc),
+                    pbc,
+                    pbs,
+                    RunningScreen(pbs.extra as Services),
+                  ),
+                ),
+
                 // Settings
                 GoRoute(
                   path: settingsHubPath,
                   name: settingsHubPath,
-                  pageBuilder: (BuildContext pbc, GoRouterState pbs) =>
-                      ezPageBuilder(configWatcher(pbc), pbc, pbs, const SettingsHubScreen()),
+                  pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
+                    configWatcher(pbc),
+                    pbc,
+                    pbs,
+                    const SettingsHubScreen(),
+                  ),
                 ),
               ],
             ),

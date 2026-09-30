@@ -7,9 +7,11 @@
 
 export 'error.dart';
 export 'home.dart';
+export 'running.dart';
 export 'settings.dart';
 
 // Path names //
 
-/// settings
-const String settingsHubPath = 'settings';
+const String runningPath = 'running';
+
+const String settingsHubPath = 'settings-hub';
