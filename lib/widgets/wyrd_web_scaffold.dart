@@ -5,9 +5,8 @@
 
 import './export.dart';
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:open_ui/open_ui.dart';
+import 'package:flutter/material.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
   final EzCP config;
@@ -25,12 +24,14 @@ class WyrdWebScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => EzAdaptiveParent(
-        small: Consumer<EzCP>(
-          builder: (_, EzCP config, __) => EzScaffold(
-            config,
-            body: body,
-            fabs: <Widget>[updater(config), if (fabs != null) ...fabs!, ...config.backFABs(isHome)],
-          ),
+        small: EzScaffold(
+          config,
+          body: body,
+          fabs: <Widget>[
+            updater(config),
+            if (fabs != null) ...fabs!,
+            ...config.backFABs(isHome),
+          ],
         ),
       );
 }
