@@ -23,8 +23,11 @@ class _ErrorScreenState extends State<ErrorScreen> {
           config,
           body: EzScreen(
             config,
-            child: Center(
-              child: EzScrollView(config, children: <Widget>[
+            alignment: Alignment.center,
+            child: EzScrollView(
+              config,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 Text(
                   config.ezL10n.g404Wonder,
                   style: config.headlineStyle,
@@ -42,9 +45,10 @@ class _ErrorScreenState extends State<ErrorScreen> {
                   style: config.labelStyle,
                   textAlign: TextAlign.center,
                 ),
-              ]),
+              ],
             ),
           ),
+          actions: <HybridAction>[],
         ),
       );
 }
