@@ -17,27 +17,14 @@ class ErrorScreen extends StatefulWidget {
 }
 
 class _ErrorScreenState extends State<ErrorScreen> {
-  // Set the page title //
-
   @override
-  void initState() {
-    super.initState();
-    ezWindowNamer(ez404());
-  }
-
-  // Return the build //
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<EzCP>(
-      builder: (_, EzCP config, __) => WyrdWebScaffold(
-        config,
-        body: EzScreen(
+  Widget build(BuildContext context) => Consumer<EzCP>(
+        builder: (_, EzCP config, __) => WyrdWebScaffold(
           config,
-          child: Center(
-            child: EzScrollView(
-              config,
-              children: <Widget>[
+          body: EzScreen(
+            config,
+            child: Center(
+              child: EzScrollView(config, children: <Widget>[
                 Text(
                   config.ezL10n.g404Wonder,
                   style: config.headlineStyle,
@@ -50,12 +37,14 @@ class _ErrorScreenState extends State<ErrorScreen> {
                   textAlign: TextAlign.center,
                 ),
                 config.separator,
-                Text(config.ezL10n.g404Note, style: config.labelStyle, textAlign: TextAlign.center),
-              ],
+                Text(
+                  config.ezL10n.g404Note,
+                  style: config.labelStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ]),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
