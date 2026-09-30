@@ -46,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.center,
           child:
               EzScrollView(config, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            // Launch //
-
             // Smoke Signal
             EzElevatedIconButton(
               config,
@@ -74,56 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               icon: const Icon(Icons.launch),
               label: 'Smoke Signal',
-            ),
-            config.divider,
-
-            // Monitor //
-
-            EzRow(
-              config,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                // Toggle
-                EzText(
-                  config,
-                  text: 'Console',
-                  style: config.titleStyle,
-                  textAlign: TextAlign.center,
-                ),
-                config.rowMargin,
-                EzIconButton(
-                  config,
-                  onPressed: () => setState(() => showReadout = !showReadout),
-                  tooltip: 'Toggle readout',
-                  icon: Icon(showReadout ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                ),
-              ],
-            ),
-            config.margin,
-
-            // Readout
-            Visibility(
-              visible: showReadout,
-              child: Container(
-                constraints: BoxConstraints(
-                  minWidth: widthOf(context) * 0.667,
-                  maxWidth: widthOf(context) * 0.667,
-                  maxHeight: heightOf(context) / 2,
-                ),
-                padding: EdgeInsets.all(config.marginVal),
-                decoration: BoxDecoration(
-                  color: config.colors.surfaceDim,
-                  borderRadius: config.textRadius,
-                ),
-                child: ValueListenableBuilder<String>(
-                  valueListenable: readout,
-                  builder: (_, String value, __) => EzScrollView(
-                    config,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    child: Text(value, style: config.bodyStyle, textAlign: TextAlign.start),
-                  ),
-                ),
-              ),
             ),
 
             // Footer
