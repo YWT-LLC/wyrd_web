@@ -59,6 +59,8 @@ func (h *Hub) run(db *sql.DB) {
 			err := client.conn.Write(context.Background(), websocket.MessageText, data)
 			if err != nil {
 				log.Printf("WebSocket write error: %v", err)
+				client.conn.Close(websocket.StatusInternalError, "write failed")
+				delete(h.clients, client)
 			}
 		}
 		h.mu.Unlock()
