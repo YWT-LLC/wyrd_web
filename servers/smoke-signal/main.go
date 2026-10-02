@@ -15,7 +15,18 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-// ActivityPub-friendly (for later)
+// Define structs //
+
+type Client struct {
+	conn *websocket.Conn
+}
+
+type Bonfire struct {
+	clients   map[*Client]bool
+	broadcast chan Message
+	mu        sync.Mutex
+}
+
 type Message struct {
 	ID        string    `json:"id"`
 	Sender    string    `json:"sender"`
@@ -23,24 +34,16 @@ type Message struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type Client struct {
-	conn *websocket.Conn
-}
+// Define helpers //
 
-type Hub struct {
-	clients   map[*Client]bool
-	broadcast chan Message
-	mu        sync.Mutex
-}
-
-func newHub() *Hub {
-	return &Hub{
+func startBonfire() *Bonfire {
+	return &Bonfire{
 		clients:   make(map[*Client]bool),
 		broadcast: make(chan Message),
 	}
 }
 
-func (h *Hub) run(db *sql.DB) {
+func (h *Bonfire) run(db *sql.DB) {
 	for msg := range h.broadcast {
 		// Persist to SQLite
 		_, err := db.Exec(
@@ -67,6 +70,8 @@ func (h *Hub) run(db *sql.DB) {
 	}
 }
 
+// Make it so //
+
 func main() {
 	// Initialize SQLite
 	db, err := sql.Open("sqlite", "./chat.db")
@@ -87,8 +92,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	hub := newHub()
-	go hub.run(db)
+	bonfire := startBonfire()
+	go bonfire.run(db)
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
@@ -100,14 +105,14 @@ func main() {
 		}
 
 		client := &Client{conn: conn}
-		hub.mu.Lock()
-		hub.clients[client] = true
-		hub.mu.Unlock()
+		bonfire.mu.Lock()
+		bonfire.clients[client] = true
+		bonfire.mu.Unlock()
 
 		defer func() {
-			hub.mu.Lock()
-			delete(hub.clients, client)
-			hub.mu.Unlock()
+			bonfire.mu.Lock()
+			delete(bonfire.clients, client)
+			bonfire.mu.Unlock()
 			conn.Close(websocket.StatusNormalClosure, "")
 		}()
 
@@ -126,7 +131,7 @@ func main() {
 			msg.ID = fmt.Sprintf("https://localhost/notes/%s", uuid.New().String())
 			msg.CreatedAt = time.Now().UTC()
 
-			hub.broadcast <- msg
+			bonfire.broadcast <- msg
 		}
 	})
 
