@@ -80,7 +80,6 @@ func main() {
 	}
 	defer db.Close()
 
-	// ActivityPub-friendly Schema (for later)
 	schema := `
 	CREATE TABLE IF NOT EXISTS messages (
 		id TEXT PRIMARY KEY,
