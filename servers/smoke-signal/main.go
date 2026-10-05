@@ -1,139 +1,113 @@
+/* wyrd_web
+ * Copyright (c) 2026 YWT (Empathetech LLC). All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 package main
 
 import (
-	"context"
 	"database/sql"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"sync"
+	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/coder/websocket"
-	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
 )
 
-// Define structs //
+const (
+	maxThumbnailBytes = 5 << 20  // 5 MB
+	maxMediaBytes     = 75 << 20 // 75 MB
+	mainBonfireID     = "main-bonfire"
+)
 
-type Client struct {
-	conn *websocket.Conn
+type Server struct {
+	db         *sql.DB
+	hub        *Hub
+	baseURL    string
+	dataDir    string
+	inviteCode string
 }
 
-type Bonfire struct {
-	clients   map[*Client]bool
-	broadcast chan Message
-	mu        sync.Mutex
-}
-
-type Message struct {
-	ID        string    `json:"id"`
-	Sender    string    `json:"sender"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-// Define helpers //
-
-func startBonfire() *Bonfire {
-	return &Bonfire{
-		clients:   make(map[*Client]bool),
-		broadcast: make(chan Message),
+func envOr(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
 	}
+	return fallback
 }
-
-func (h *Bonfire) run(db *sql.DB) {
-	for msg := range h.broadcast {
-		// Persist to SQLite
-		_, err := db.Exec(
-			"INSERT INTO messages (id, sender, content, created_at) VALUES (?, ?, ?, ?)",
-			msg.ID, msg.Sender, msg.Content, msg.CreatedAt,
-		)
-		if err != nil {
-			log.Printf("Database write error: %v", err)
-			continue
-		}
-
-		// Broadcast to all active connected clients
-		data, _ := json.Marshal(msg)
-		h.mu.Lock()
-		for client := range h.clients {
-			err := client.conn.Write(context.Background(), websocket.MessageText, data)
-			if err != nil {
-				log.Printf("WebSocket write error: %v", err)
-				client.conn.Close(websocket.StatusInternalError, "write failed")
-				delete(h.clients, client)
-			}
-		}
-		h.mu.Unlock()
-	}
-}
-
-// Make it so //
 
 func main() {
-	// Initialize SQLite
-	db, err := sql.Open("sqlite", "./chat.db")
+	dataDir := envOr("SMOKE_DATA_DIR", "./data")
+	for _, sub := range []string{"uploads", "thumbnails"} {
+		if err := os.MkdirAll(filepath.Join(dataDir, sub), 0o755); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	// Pragmas in the DSN apply to every pooled connection.
+	dsn := "file:" + filepath.Join(dataDir, "smoke.db") +
+		"?_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)"
+	db, err := sql.Open("sqlite", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	schema := `
-	CREATE TABLE IF NOT EXISTS messages (
-		id TEXT PRIMARY KEY,
-		sender TEXT NOT NULL,
-		content TEXT NOT NULL,
-		created_at DATETIME NOT NULL
-	);`
-	if _, err := db.Exec(schema); err != nil {
+	if err := migrate(db); err != nil {
 		log.Fatal(err)
 	}
 
-	bonfire := startBonfire()
-	go bonfire.run(db)
+	s := &Server{
+		db:         db,
+		hub:        newHub(),
+		baseURL:    envOr("SMOKE_BASE_URL", "http://localhost:8080"),
+		dataDir:    dataDir,
+		inviteCode: os.Getenv("SMOKE_INVITE_CODE"),
+	}
+	go s.janitor()
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
-			InsecureSkipVerify: true, // Allows connections from emulator
-		})
-		if err != nil {
-			log.Println("Connection failed:", err)
-			return
-		}
+	addr := envOr("SMOKE_ADDR", ":8080")
+	srv := &http.Server{
+		Addr:              addr,
+		Handler:           s.routes(),
+		ReadHeaderTimeout: 10 * time.Second,
+		// No Read/WriteTimeout: they would kill large uploads and WebSockets.
+	}
+	log.Printf("Smoke Signal listening on %s", addr)
+	log.Fatal(srv.ListenAndServe())
+}
 
-		client := &Client{conn: conn}
-		bonfire.mu.Lock()
-		bonfire.clients[client] = true
-		bonfire.mu.Unlock()
+func (s *Server) routes() http.Handler {
+	mux := http.NewServeMux()
 
-		defer func() {
-			bonfire.mu.Lock()
-			delete(bonfire.clients, client)
-			bonfire.mu.Unlock()
-			conn.Close(websocket.StatusNormalClosure, "")
-		}()
+	// Accounts
+	mux.HandleFunc("POST /api/register", s.handleRegister)
+	mux.HandleFunc("POST /api/login", s.handleLogin)
+	mux.HandleFunc("POST /api/logout", s.auth(s.handleLogout))
+	mux.HandleFunc("GET /api/me", s.auth(s.handleGetMe))
+	mux.HandleFunc("PATCH /api/me", s.auth(s.handleUpdateMe))
+	mux.HandleFunc("DELETE /api/me", s.auth(s.handleDeleteMe))
+	mux.HandleFunc("PUT /api/me/thumbnail", s.auth(s.handleSetThumbnail))
+	mux.HandleFunc("DELETE /api/me/thumbnail", s.auth(s.handleDeleteThumbnail))
+	mux.HandleFunc("GET /api/users", s.auth(s.handleSearchUsers))
+	mux.HandleFunc("GET /api/users/{id}", s.auth(s.handleGetUser))
+	mux.HandleFunc("GET /api/users/{id}/thumbnail", s.auth(s.handleGetThumbnail))
 
-		// Read loop
-		for {
-			var msg Message
-			_, data, err := conn.Read(r.Context())
-			if err != nil {
-				break
-			}
-			if err := json.Unmarshal(data, &msg); err != nil {
-				continue
-			}
+	// Conversations (bonfire / dm / group)
+	mux.HandleFunc("GET /api/conversations", s.auth(s.handleListConversations))
+	mux.HandleFunc("POST /api/conversations/dm", s.auth(s.handleCreateDM))
+	mux.HandleFunc("POST /api/conversations/group", s.auth(s.handleCreateGroup))
+	mux.HandleFunc("POST /api/conversations/{id}/members", s.auth(s.handleAddMember))
+	mux.HandleFunc("DELETE /api/conversations/{id}/members/me", s.auth(s.handleLeaveGroup))
+	mux.HandleFunc("GET /api/conversations/{id}/messages", s.auth(s.handleListMessages))
 
-			// Assign server-side URI ID and timestamp
-			msg.ID = fmt.Sprintf("https://localhost/notes/%s", uuid.New().String())
-			msg.CreatedAt = time.Now().UTC()
+	// Media
+	mux.HandleFunc("POST /api/uploads", s.auth(s.handleUpload))
+	mux.HandleFunc("GET /api/files/{id}", s.auth(s.handleGetFile))
 
-			bonfire.broadcast <- msg
-		}
-	})
+	// Realtime
+	mux.HandleFunc("GET /ws", s.handleWS)
 
-	fmt.Println("Server running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	return mux
 }
