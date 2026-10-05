@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -127,12 +128,132 @@ func (s *Server) receiveFile(w http.ResponseWriter, r *http.Request, limit int64
 	}
 }
 
-func (s *Server) storePart(part io.Reader, limit int64, subdir string, imagesOnly bool) (*storedFile, error) {
-	type namedPart interface {
-		FileName() string
-		Header() map[string][]string
+func (s *Server) storePart(part *multipart.Part, limit int64, subdir string, imagesOnly bool) (*storedFile, error) {
+	br := bufio.NewReaderSize(part, 512)
+	head, err := br.Peek(512)
+	if err != nil && err != io.EOF {
+		return nil, bodyErr(err)
 	}
-	// multipart.Part exposes Header as a field, so we take the pieces we need via a wrapper in receiveFile's caller.
-	_ = namedPart(nil)
-	return nil, errors.New("replaced below")
+	if len(head) == 0 {
+		return nil, errEmptyFile
+	}
+
+	mimeType, kind, ext, ok := classify(http.DetectContentType(head), part.Header.Get("Content-Type"), imagesOnly)
+	if !ok {
+		return nil, errBadType
+	}
+
+	id := newID()
+	diskName := id + ext
+	fullPath := filepath.Join(s.dataDir, subdir, diskName)
+	out, err := os.OpenFile(fullPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
+	if err != nil {
+		return nil, err
+	}
+	n, err := io.Copy(out, io.LimitReader(br, limit+1))
+	if cerr := out.Close(); err == nil {
+		err = cerr
+	}
+	if err != nil {
+		os.Remove(fullPath)
+		return nil, bodyErr(err)
+	}
+	if n > limit {
+		os.Remove(fullPath)
+		return nil, errTooLarge
+	}
+
+	name := filepath.Base(part.FileName())
+	if name == "." || name == "/" || name == "" {
+		name = "file" + ext
+	}
+	if rs := []rune(name); len(rs) > 100 {
+		name = string(rs[:100])
+	}
+	return &storedFile{
+		id: id, diskName: diskName, fullPath: fullPath,
+		mime: mimeType, kind: kind, origName: name, size: n,
+	}, nil
+}
+
+func writeUploadError(w http.ResponseWriter, err error, limit int64) {
+	switch {
+	case errors.Is(err, errTooLarge):
+		writeError(w, http.StatusRequestEntityTooLarge, fmt.Sprintf("file exceeds the %d MB limit", limit>>20))
+	case errors.Is(err, errBadType):
+		writeError(w, http.StatusUnsupportedMediaType, err.Error())
+	case errors.Is(err, errNoFile), errors.Is(err, errEmptyFile), errors.Is(err, errBadRequest):
+		writeError(w, http.StatusBadRequest, err.Error())
+	default:
+		log.Printf("upload error: %v", err)
+		writeError(w, http.StatusInternalServerError, "upload failed")
+	}
+}
+
+// POST /api/uploads (multipart, field "file") -> Attachment
+// The attachment is "pending" until a message references it.
+func (s *Server) handleUpload(w http.ResponseWriter, r *http.Request, uid string) {
+	f, err := s.receiveFile(w, r, maxMediaBytes, "uploads", false)
+	if err != nil {
+		writeUploadError(w, err, maxMediaBytes)
+		return
+	}
+	_, err = s.db.Exec(
+		`INSERT INTO attachments (id, uploader_id, kind, mime, size, filename, path, created_at)
+		 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		f.id, uid, f.kind, f.mime, f.size, f.origName, f.diskName, time.Now().UnixMilli(),
+	)
+	if err != nil {
+		os.Remove(f.fullPath)
+		writeError(w, http.StatusInternalServerError, "could not save upload")
+		return
+	}
+	writeJSON(w, http.StatusCreated, Attachment{
+		ID: f.id, Kind: f.kind, Mime: f.mime, Size: f.size,
+		Filename: f.origName, URL: "/api/files/" + f.id,
+	})
+}
+
+// GET /api/files/{id} - only the uploader (while pending) or members of the
+// message's conversation (anyone, for bonfires) can fetch it.
+func (s *Server) handleGetFile(w http.ResponseWriter, r *http.Request, uid string) {
+	var diskName, mimeType string
+	err := s.db.QueryRow(`
+		SELECT a.path, a.mime
+		FROM attachments a
+		LEFT JOIN messages m ON m.id = a.message_id
+		LEFT JOIN conversations c ON c.id = m.conversation_id
+		WHERE a.id = ? AND (
+			(a.message_id IS NULL AND a.uploader_id = ?)
+			OR c.type = 'bonfire'
+			OR EXISTS (SELECT 1 FROM conversation_members cm
+			           WHERE cm.conversation_id = c.id AND cm.user_id = ?)
+		)`, r.PathValue("id"), uid, uid).Scan(&diskName, &mimeType)
+	if err != nil {
+		writeError(w, http.StatusNotFound, "file not found")
+		return
+	}
+	serveFile(w, r, filepath.Join(s.dataDir, "uploads", diskName), mimeType)
+}
+
+// serveFile uses ServeContent so Range requests work (needed for video seeking).
+func serveFile(w http.ResponseWriter, r *http.Request, fullPath, contentType string) {
+	f, err := os.Open(fullPath)
+	if err != nil {
+		writeError(w, http.StatusNotFound, "file not found")
+		return
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "file error")
+		return
+	}
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.Header().Set("Cache-Control", "private, max-age=31536000, immutable")
+	http.ServeContent(w, r, "", info.ModTime(), f)
 }

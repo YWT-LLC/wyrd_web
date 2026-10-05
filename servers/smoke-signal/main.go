@@ -16,6 +16,8 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+//* Define the build data *//
+
 const (
 	maxThumbnailBytes = 5 << 20  // 5 MB
 	maxMediaBytes     = 75 << 20 // 75 MB
@@ -30,6 +32,9 @@ type Server struct {
 	inviteCode string
 }
 
+//* Define custom functions *//
+
+// Attempt to retrieve env var, return fallback to sender on "failure"
 func envOr(key, fallback string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
