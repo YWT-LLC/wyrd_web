@@ -12,6 +12,8 @@ export 'settings.dart';
 
 // Path names //
 
+const String homePath = 'ww';
+
 const String runningPath = 'running';
 
 const String settingsHubPath = 'settings-hub';
