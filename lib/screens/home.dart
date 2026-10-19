@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           config,
                           label: service.name,
                           icon: service.icon(config),
-                          onPressed: () => context.goNamed(runningPath, extra: service),
+                          onPressed: () => context.goNamed(launchScreenName, extra: service),
                         ))
                     .toList(),
               ),
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           HybridAction(
             label: config.ezL10n.gSettings,
             icon: Icons.settings,
-            onPressed: () => context.goNamed(settingsHubPath),
+            onPressed: () => context.goNamed(settingsScreenName),
           ),
         ],
       ),

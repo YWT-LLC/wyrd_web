@@ -12,8 +12,11 @@ export 'settings.dart';
 
 // Path names //
 
-const String homePath = 'ww';
+const String homePath = '/';
+const String homeName = 'ww-home';
 
-const String runningPath = 'running';
+const String launchScreenPath = 'launch';
+const String launchScreenName = 'ww-launch';
 
-const String settingsHubPath = 'settings-hub';
+const String settingsScreenPath = 'settings';
+const String settingsScreenName = 'ww-settings';

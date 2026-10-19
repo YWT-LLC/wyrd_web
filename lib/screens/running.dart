@@ -13,16 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-class RunningScreen extends StatefulWidget {
+class LaunchScreen extends StatefulWidget {
   final Services toRun;
 
-  const RunningScreen(this.toRun, {super.key});
+  const LaunchScreen(this.toRun, {super.key});
 
   @override
-  State<RunningScreen> createState() => _RunningScreenState();
+  State<LaunchScreen> createState() => _LaunchScreenState();
 }
 
-class _RunningScreenState extends State<RunningScreen> {
+class _LaunchScreenState extends State<LaunchScreen> {
   // Define the build data //
 
   ValueNotifier<String> readout = ValueNotifier<String>('');
@@ -86,7 +86,7 @@ class _RunningScreenState extends State<RunningScreen> {
           HybridAction(
             label: config.ezL10n.gSettings,
             icon: Icons.settings,
-            onPressed: () => context.goNamed(settingsHubPath),
+            onPressed: () => context.goNamed(settingsScreenName),
           ),
         ],
       ),

@@ -17,7 +17,7 @@ class SettingsFAB extends FloatingActionButton {
   SettingsFAB(this.config, {required BuildContext parentContext, super.key})
       : super(
           child: EzIcon(config, Icons.settings),
-          onPressed: () => parentContext.goNamed(settingsHubPath),
+          onPressed: () => parentContext.goNamed(settingsScreenName),
           tooltip: l10n(config).gSettingsHint,
         );
 }

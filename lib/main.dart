@@ -18,7 +18,7 @@ final List<RouteBase> routes = <RouteBase>[
   // Home/select service
   GoRoute(
     path: homePath,
-    name: homePath,
+    name: homeName,
     pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
       configWatcher(pbc),
       pbc,
@@ -28,20 +28,20 @@ final List<RouteBase> routes = <RouteBase>[
     routes: <RouteBase>[
       // Run service
       GoRoute(
-        path: runningPath,
-        name: runningPath,
+        path: launchScreenPath,
+        name: launchScreenName,
         pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
           configWatcher(pbc),
           pbc,
           pbs,
-          RunningScreen(pbs.extra as Services),
+          LaunchScreen(pbs.extra as Services),
         ),
       ),
 
       // Settings
       GoRoute(
-        path: settingsHubPath,
-        name: settingsHubPath,
+        path: settingsScreenPath,
+        name: settingsScreenName,
         pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
           configWatcher(pbc),
           pbc,
