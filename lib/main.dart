@@ -15,41 +15,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Define the router //
 
 final List<RouteBase> routes = <RouteBase>[
-  // Home/select service
+  // Run service
   GoRoute(
-    path: homePath,
-    name: homeName,
+    path: launchScreenPath,
+    name: launchScreenName,
     pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
       configWatcher(pbc),
       pbc,
       pbs,
-      const HomeScreen(),
+      LaunchScreen(pbs.extra as Services),
     ),
-    routes: <RouteBase>[
-      // Run service
-      GoRoute(
-        path: launchScreenPath,
-        name: launchScreenName,
-        pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
-          configWatcher(pbc),
-          pbc,
-          pbs,
-          LaunchScreen(pbs.extra as Services),
-        ),
-      ),
+  ),
 
-      // Settings
-      GoRoute(
-        path: settingsScreenPath,
-        name: settingsScreenName,
-        pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
-          configWatcher(pbc),
-          pbc,
-          pbs,
-          const SettingsHubScreen(),
-        ),
-      ),
-    ],
+  // Settings
+  GoRoute(
+    path: settingsScreenPath,
+    name: settingsScreenName,
+    pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
+      configWatcher(pbc),
+      pbc,
+      pbs,
+      const SettingsHubScreen(),
+    ),
   ),
 ];
 
@@ -72,7 +59,20 @@ class WyrdWeb extends StatelessWidget {
         routerConfig: GoRouter(
           initialLocation: homePath,
           errorBuilder: (_, __) => const ErrorScreen(),
-          routes: routes,
+          routes: <RouteBase>[
+            // Home/select service
+            GoRoute(
+              path: homePath,
+              name: homeName,
+              pageBuilder: (BuildContext pbc, GoRouterState pbs) => ezPageBuilder(
+                configWatcher(pbc),
+                pbc,
+                pbs,
+                const HomeScreen(),
+              ),
+              routes: routes,
+            ),
+          ],
         ),
       );
 }
