@@ -499,7 +499,7 @@ func (s *Server) postMessage(senderID, convID, content string, attachmentIDs []s
 		return clientError("conversation not found")
 	}
 
-	id := s.baseURL + "/notes/" + newID() // URI-style ID, ActivityPub-friendly like before
+	id := s.baseUrl + "/notes/" + newID() // URI-style ID, ActivityPub-friendly like before
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err

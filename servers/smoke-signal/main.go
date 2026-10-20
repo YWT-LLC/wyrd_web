@@ -27,7 +27,7 @@ const (
 type Server struct {
 	db         *sql.DB
 	hub        *Hub
-	baseURL    string
+	baseUrl    string
 	dataDir    string
 	inviteCode string
 }
@@ -66,7 +66,7 @@ func main() {
 	s := &Server{
 		db:         db,
 		hub:        newHub(),
-		baseURL:    envOr("SMOKE_BASE_URL", "http://localhost:8080"),
+		baseUrl:    envOr("SMOKE_BASE_URL", "http://localhost:8080"),
 		dataDir:    dataDir,
 		inviteCode: os.Getenv("SMOKE_INVITE_CODE"),
 	}
