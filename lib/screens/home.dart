@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               // Footer
-              EzFooter(config, a11howPath: ywt.wyrdWebContributeA11),
+              EzFooter(config, a11howPath: ywt.wwContributeA11),
             ],
           ),
         ),

@@ -7,7 +7,7 @@
 
 export 'error.dart';
 export 'home.dart';
-export 'running.dart';
+export 'launch.dart';
 export 'settings.dart';
 
 // Path names //
