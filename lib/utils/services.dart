@@ -4,7 +4,7 @@
  */
 
 import 'package:open_ui/open_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum Services { smokeSignal }
 

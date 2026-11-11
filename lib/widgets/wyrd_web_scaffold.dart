@@ -5,9 +5,10 @@
 
 import 'dart:math';
 import './export.dart';
+import 'package:ywt_private/ywt_private.dart' as ywt;
 
 import 'package:open_ui/open_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class WyrdWebScaffold extends StatelessWidget {
   final EzCP config;
@@ -87,6 +88,7 @@ class WyrdWebScaffold extends StatelessWidget {
       small: EzScaffold(
         config,
         body: body,
+        footer: EzFooter(config, a11howPath: ywt.wwContributeA11),
         fabs: <Widget>[
           updater(config),
           ...fabActions(),
@@ -113,6 +115,7 @@ class WyrdWebScaffold extends StatelessWidget {
           ),
         ),
         body: body,
+        footer: EzFooter(config, a11howPath: ywt.wwContributeA11),
         fabs: <Widget>[
           updater(config),
           if (settingsFABs != null) ...settingsFABs!,
