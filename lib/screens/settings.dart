@@ -80,6 +80,7 @@ class SettingsHubScreen extends StatelessWidget {
             target: target,
           ),
         ),
+        settingsA11: true,
         actions: <HybridAction>[
           const HybridAction(label: appName, icon: Icons.settings, onPressed: null),
         ],

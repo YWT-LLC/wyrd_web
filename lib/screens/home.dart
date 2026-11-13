@@ -6,7 +6,6 @@
 import '../screens/export.dart';
 import '../utils/export.dart';
 import '../widgets/export.dart';
-import 'package:ywt_private/ywt_private.dart' as ywt;
 
 import 'package:open_ui/open_ui.dart';
 import 'package:provider/provider.dart';
@@ -59,9 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ))
                     .toList(),
               ),
-
-              // Footer
-              EzFooter(config, a11howPath: ywt.wwContributeA11),
             ],
           ),
         ),

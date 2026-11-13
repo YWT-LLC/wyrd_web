@@ -16,6 +16,7 @@ class WyrdWebScaffold extends StatelessWidget {
   final List<HybridAction> actions;
   final List<Widget>? settingsFABs;
   final bool isHome;
+  final bool settingsA11;
 
   const WyrdWebScaffold(
     this.config, {
@@ -24,6 +25,7 @@ class WyrdWebScaffold extends StatelessWidget {
     required this.actions,
     this.settingsFABs,
     this.isHome = false,
+    this.settingsA11 = false,
   });
 
   @override
@@ -88,7 +90,10 @@ class WyrdWebScaffold extends StatelessWidget {
       small: EzScaffold(
         config,
         body: body,
-        footer: EzFooter(config, a11howPath: ywt.wwContributeA11),
+        footer: EzFooter(
+          config,
+          a11howPath: settingsA11 ? ywt.openUIContributeA11 : ywt.wwContributeA11,
+        ),
         fabs: <Widget>[
           updater(config),
           ...fabActions(),
@@ -115,7 +120,10 @@ class WyrdWebScaffold extends StatelessWidget {
           ),
         ),
         body: body,
-        footer: EzFooter(config, a11howPath: ywt.wwContributeA11),
+        footer: EzFooter(
+          config,
+          a11howPath: settingsA11 ? ywt.openUIContributeA11 : ywt.wwContributeA11,
+        ),
         fabs: <Widget>[
           updater(config),
           if (settingsFABs != null) ...settingsFABs!,
