@@ -83,7 +83,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           HybridAction(
             label: config.ezL10n.gSettings,
             icon: Icons.settings,
-            onPressed: () => context.goNamed(settingsScreenName),
+            onPressed: () => context.pushNamed(settingsScreenName),
           ),
         ],
       ),
