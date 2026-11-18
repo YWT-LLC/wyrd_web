@@ -12,5 +12,5 @@ const String appName = 'Wyrd.Web';
 const String androidPackage = 'llc.ywt.wyrd_web';
 
 const Map<String, Type> allWWKeys = <String, Type>{
-  ...allEZConfigKeys,
+  ...allEzConfigPairs,
 };
