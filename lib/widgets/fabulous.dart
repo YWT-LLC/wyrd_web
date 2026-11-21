@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 class SettingsFAB extends FloatingActionButton {
-  final EzCP config;
+  final EzProvider config;
 
   SettingsFAB(this.config, {required BuildContext parentContext, super.key})
       : super(
@@ -22,7 +22,7 @@ class SettingsFAB extends FloatingActionButton {
         );
 }
 
-EzUpdaterFAB updater(EzCP config) => EzUpdaterFAB(
+EzUpdaterFAB updater(EzProvider config) => EzUpdaterFAB(
       config,
       appVersion: '1.0.1',
       versionSource:

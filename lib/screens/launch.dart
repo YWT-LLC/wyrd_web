@@ -38,8 +38,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EzCP>(
-      builder: (_, EzCP config, __) => WyrdWebScaffold(
+    return Consumer<EzProvider>(
+      builder: (_, EzProvider config, __) => WyrdWebScaffold(
         config,
         body: EzScreen(
           config,

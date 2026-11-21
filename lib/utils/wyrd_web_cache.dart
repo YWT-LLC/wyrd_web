@@ -22,7 +22,7 @@ class WyrdWebCache extends EzAppCache {
   void init(_) {}
 
   @override
-  Future<void> rebuild(EzCP config) async {
+  Future<void> rebuild(EzProvider config) async {
     if (_locale != config.locale) {
       _l10n = await Lang.delegate.load(config.locale);
       _locale = config.locale;
@@ -30,6 +30,6 @@ class WyrdWebCache extends EzAppCache {
   }
 }
 
-WyrdWebCache _cache(EzCP config) => config.appCache as WyrdWebCache;
+WyrdWebCache _cache(EzProvider config) => config.appCache as WyrdWebCache;
 
-Lang l10n(EzCP config) => _cache(config).l10n;
+Lang l10n(EzProvider config) => _cache(config).l10n;

@@ -13,7 +13,7 @@ extension ServiceConfig on Services {
         Services.smokeSignal => 'Smoke Signal',
       };
 
-  Widget icon(EzCP config) => switch (this) {
+  Widget icon(EzProvider config) => switch (this) {
         Services.smokeSignal => EzIcon(config, Icons.fireplace),
       };
 

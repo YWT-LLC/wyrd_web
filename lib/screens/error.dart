@@ -18,8 +18,8 @@ class ErrorScreen extends StatefulWidget {
 
 class _ErrorScreenState extends State<ErrorScreen> {
   @override
-  Widget build(BuildContext context) => Consumer<EzCP>(
-        builder: (_, EzCP config, __) => WyrdWebScaffold(
+  Widget build(BuildContext context) => Consumer<EzProvider>(
+        builder: (_, EzProvider config, __) => WyrdWebScaffold(
           config,
           body: EzScreen(
             config,
